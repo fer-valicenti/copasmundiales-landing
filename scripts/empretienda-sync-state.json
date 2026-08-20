@@ -1,0 +1,15 @@
+{
+  "realSize": {
+    "listPrice": "$199.999,00",
+    "transferPrice": "$179.999,10",
+    "installment": "$66.666,33"
+  },
+  "mini": {
+    "listPrice": "$45.000,00",
+    "transferPrice": "$40.500,00"
+  },
+  "aniosExperiencia": "24",
+  "entregas": "+9.800",
+  "lastChecked": "2026-08-20T22:10:26.633Z",
+  "lastChanged": null
+}
