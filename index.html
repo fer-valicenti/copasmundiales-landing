@@ -151,7 +151,13 @@ section { padding: var(--section-y) 0; }
 .segments a {
   padding: 8px 14px; border-radius: var(--radius-pill);
   font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--brand-brown);
+  white-space: nowrap;
   transition: background .15s;
+}
+/* Pantallas medianas: el menú se compacta un poco para que entre en una línea */
+@media (min-width: 960px) and (max-width: 1099px) {
+  .segments a { padding: 8px 10px; }
+  .nav .container { gap: 16px; }
 }
 .segments a:hover { background: var(--paper); }
 
@@ -309,7 +315,12 @@ section { padding: var(--section-y) 0; }
 .showcase-grid { display: contents; }
 .showcase-grid > [aria-hidden] { display: none; }
 .showcase-copy { order: 1; padding: 0 var(--gutter); text-align: center; }
-.showcase-video { order: 2; display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+/* La imagen fija va también de fondo del video: si un navegador no llega a dibujar el video,
+   se sigue viendo la copa (quieta) en vez de un recuadro gris vacío */
+.showcase-video {
+  order: 2; display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
+  background: #efefef url(media/copa-flotando.jpg) center / cover no-repeat;
+}
 .showcase-copy .actions { justify-content: center; }
 .showcase-title {
   font-weight: 900; text-transform: uppercase;
@@ -325,11 +336,18 @@ section { padding: var(--section-y) 0; }
 }
 .showcase-specs li { display: flex; flex-direction: column; gap: 4px; }
 .showcase-specs strong {
-  font-size: clamp(28px, 7vw, 40px); font-weight: 900; line-height: 1; letter-spacing: -0.035em;
+  font-size: clamp(22px, 6.2vw, 40px); font-weight: 900; line-height: 1; letter-spacing: -0.035em;
+  white-space: nowrap;
   background-image: var(--gradient-gold); -webkit-background-clip: text; background-clip: text; color: transparent;
   padding-bottom: 4px;
 }
 .showcase-specs span { font-size: 14px; color: var(--muted); }
+/* Aclaración discreta en la esquina: el video es un render propio */
+/* En celular va debajo de las medidas; en escritorio, en la esquina inferior derecha */
+.showcase-credit {
+  order: 4; margin: -16px 0 0; padding: 0 var(--gutter); text-align: center;
+  font-size: 12px; line-height: 1.4; color: var(--muted);
+}
 /* Zoom suave del video al entrar en pantalla (solo navegadores que lo soportan) */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
@@ -372,6 +390,11 @@ section { padding: var(--section-y) 0; }
   .showcase-title span { margin-inline: 0; }
   .showcase-specs { order: 0; padding: 0; grid-template-columns: 1fr; justify-items: end; text-align: right; gap: 28px; }
   .showcase-specs strong { font-size: clamp(40px, 3.6vw, 56px); }
+  .showcase-credit {
+    position: absolute; z-index: 1; margin: 0; padding: 0; text-align: right;
+    right: max(var(--gutter), calc((100% - var(--page-max)) / 2 + var(--gutter)));
+    bottom: 14px;
+  }
   .split { grid-template-columns: 1fr 1fr; gap: 64px; }
   .mosaic { order: 0; }
   .feature { grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px; }
@@ -393,6 +416,7 @@ section { padding: var(--section-y) 0; }
       </a>
       <nav class="segments" aria-label="Secciones">
         <a href="#detalles">Detalles</a>
+        <a href="#vitrina">Vitrina</a>
         <a href="#comparacion">Comparación</a>
         <a href="#mini">Mini copa</a>
         <a href="#clientes">Clientes</a>
@@ -467,7 +491,7 @@ section { padding: var(--section-y) 0; }
   </section>
 
   <!-- Vitrina: render de la copa flotando -->
-  <section class="showcase" aria-labelledby="vitrina-titulo">
+  <section class="showcase" id="vitrina" aria-labelledby="vitrina-titulo">
     <video class="showcase-video" muted loop playsinline preload="metadata" poster="media/copa-flotando.jpg" aria-label="Render de la Copa del Mundo flotando">
       <source src="media/copa-flotando.mp4" type="video/mp4">
     </video>
@@ -487,6 +511,7 @@ section { padding: var(--section-y) 0; }
         <li><strong>3,5 kg</strong><span>maciza</span></li>
       </ul>
     </div>
+    <p class="showcase-credit">Render 3D del trofeo original, elaborado por Copasmundiales</p>
   </section>
 
   <!-- Comparación -->
