@@ -65,10 +65,10 @@ async function main() {
   applyGlobalReplace("Entregas", state.entregas, fresh.entregas);
 
   // "años de experiencia" necesita reemplazo con contexto: un número corto y suelto como
-  // "24" no es seguro de reemplazar globalmente (por ejemplo corrompería la clase Tailwind "mt-24").
+  // "24" no es seguro de reemplazar globalmente (podría pisar valores de CSS u otros números).
   if (state.aniosExperiencia !== fresh.aniosExperiencia) {
     const anchorRe = new RegExp(
-      `(<p class="font-display text-4xl text-gold"[^>]*>)${state.aniosExperiencia}(</p><p class="mt-1 text-sm text-muted-foreground"[^>]*>años de experiencia</p>)`
+      `(<p class="stat-num"[^>]*>)${state.aniosExperiencia}(</p>\\s*<p class="stat-label"[^>]*>años de experiencia</p>)`
     );
     if (anchorRe.test(html)) {
       html = html.replace(anchorRe, `$1${fresh.aniosExperiencia}$2`);
