@@ -80,6 +80,30 @@ async function main() {
     applyGlobalReplace("Años de experiencia (frase)", `${state.aniosExperiencia} años de experiencia`, `${fresh.aniosExperiencia} años de experiencia`);
   }
 
+  // Control final, en cada corrida: la página tiene que mostrar exactamente lo que dice Empretienda.
+  // Si algo no cuadra, el script falla (la corrida queda en rojo y GitHub avisa por mail) en vez de
+  // dejar un aviso que al día siguiente desaparece.
+  const problemas = [];
+  const debeEstar = [
+    ["Precio lista (tamaño real)", fresh.realSize.listPrice],
+    ["Precio transferencia (tamaño real)", fresh.realSize.transferPrice],
+    ["Cuota (tamaño real)", fresh.realSize.installment],
+    ["Precio lista (mini)", fresh.mini.listPrice],
+    ["Precio transferencia (mini)", fresh.mini.transferPrice],
+    ["Entregas", fresh.entregas],
+    ["Años de experiencia (frase)", `${fresh.aniosExperiencia} años de experiencia`],
+  ];
+  for (const [label, valor] of debeEstar) {
+    if (!html.includes(valor)) problemas.push(`${label}: la página no muestra "${valor}"`);
+  }
+  const statRe = new RegExp(
+    `<p class="stat-num"[^>]*>${fresh.aniosExperiencia}</p>\\s*<p class="stat-label"[^>]*>años de experiencia</p>`
+  );
+  if (!statRe.test(html)) problemas.push(`Años de experiencia (stat): no encontré el bloque con "${fresh.aniosExperiencia}"`);
+  const preciosValidos = new Set([...Object.values(fresh.realSize), ...Object.values(fresh.mini)]);
+  const preciosDeMas = [...new Set(html.match(PRICE_RE) || [])].filter((p) => !preciosValidos.has(p));
+  if (preciosDeMas.length) problemas.push(`La página muestra precios que no están en Empretienda: ${preciosDeMas.join(", ")}`);
+
   if (changed) {
     state.realSize = fresh.realSize;
     state.mini = fresh.mini;
@@ -97,6 +121,13 @@ async function main() {
   if (process.env.GITHUB_OUTPUT) {
     fs.appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\n`);
   }
+
+  if (problemas.length) {
+    console.error("ERROR: la landing no coincide con Empretienda, revisar a mano:");
+    problemas.forEach((p) => console.error(" - " + p));
+    process.exit(1);
+  }
+  console.log("Control OK: la landing muestra los mismos precios y datos que Empretienda.");
 }
 
 main().catch((err) => {
