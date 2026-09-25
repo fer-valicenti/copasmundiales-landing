@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preload" as="image" href="https://d22fxaf9t8d39k.cloudfront.net/954eccd0171910414028914adffa3a35400b0dbf3ff6301211aeae2309e5324d442773.png">
-<link rel="preload" as="image" href="https://d22fxaf9t8d39k.cloudfront.net/656d1ddbaec7fcd3d19f17fd44ff9702950e092bc2848a3c1e416497828c2d18442773.jpg">
+<link rel="preload" as="image" href="media/copa-flotando.jpg">
 <title>Copa del Mundo Tamaño Real 1:1 | COPASMUNDIALES</title>
 <meta name="description" content="Réplica modelo italiano de la Copa del Mundo, escala 1:1 (36,8 cm), maciza 3,5 kg, pintada en oro. Envío sin cargo a toda Argentina y 3 cuotas sin interés.">
 <meta name="twitter:card" content="summary_large_image">
@@ -162,13 +162,15 @@ section { padding: var(--section-y) 0; }
 .segments a:hover { background: var(--paper); }
 
 /* ---------- Hero ---------- */
-.hero { padding: 56px 0 var(--section-y); text-align: center; }
+/* La portada queda compacta (título + botones) para que el render asome enseguida */
+.hero { padding: 56px 0 48px; text-align: center; }
 .hero .tag { margin-bottom: 28px; }
 .hero .display { max-width: 1100px; margin: 0 auto; }
-.hero .body-lg { max-width: 720px; margin: 28px auto 0; }
 .hero .actions { justify-content: center; margin-top: 36px; }
-.hero-stage { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 56px; align-items: center; text-align: left; }
-.hero-photo { max-width: 460px; width: 100%; margin: 0 auto; }
+/* Foto de la copa + recuadro de compra, en su propia sección después del render */
+.hero-stage { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: center; text-align: left; }
+/* La foto va después del recuadro (en celular separa las dos copas: render y foto) */
+.hero-photo { max-width: 460px; width: 100%; margin: 0 auto; order: 2; }
 
 /* Tarjeta oscura de compra (equivalente a la "dark section card" de Wise) */
 .buy-card {
@@ -304,34 +306,28 @@ section { padding: var(--section-y) 0; }
 .whatsapp-float:hover { transform: scale(1.06); }
 .whatsapp-float svg { width: 28px; height: 28px; display: block; }
 
+
 /* ---------- Vitrina: render de la copa flotando ---------- */
 /* Fondo gris parecido al del video, para que no se note el borde */
-/* En celular: texto, video y medidas apilados (el contenedor se "disuelve" para poder ordenarlos) */
+/* En celular: la copa primero (pegada a la portada, para que se vea al entrar), después las medidas,
+   el texto y la aclaración (el contenedor se "disuelve" para poder ordenarlos) */
 .showcase {
   position: relative; overflow: hidden; background: #efefef;
-  padding: 56px 0 48px;
-  display: flex; flex-direction: column; gap: 32px;
+  padding: 0 0 48px;
+  display: flex; flex-direction: column; gap: 28px;
 }
 .showcase-grid { display: contents; }
 .showcase-grid > [aria-hidden] { display: none; }
-.showcase-copy { order: 1; padding: 0 var(--gutter); text-align: center; }
+.showcase-copy { order: 3; padding: 0 var(--gutter); text-align: center; }
 /* La imagen fija va también de fondo del video: si un navegador no llega a dibujar el video,
    se sigue viendo la copa (quieta) en vez de un recuadro gris vacío */
 .showcase-video {
-  order: 2; display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
+  order: 1; display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
   background: #efefef url(media/copa-flotando.jpg) center / cover no-repeat;
 }
-.showcase-copy .actions { justify-content: center; }
-.showcase-title {
-  font-weight: 900; text-transform: uppercase;
-  font-size: clamp(40px, 3.9vw, 60px);
-  line-height: 1.08; letter-spacing: -0.035em;
-  margin: 20px 0 16px;
-}
-.showcase-title span { display: block; width: fit-content; margin-inline: auto; }
-.showcase-copy .muted { max-width: 380px; margin: 0 auto 24px; }
+.showcase-lead { max-width: 440px; margin: 0 auto; }
 .showcase-specs {
-  order: 3; list-style: none; margin: 0; padding: 0 var(--gutter);
+  order: 2; list-style: none; margin: 0; padding: 0 var(--gutter);
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center;
 }
 .showcase-specs li { display: flex; flex-direction: column; gap: 4px; }
@@ -345,7 +341,7 @@ section { padding: var(--section-y) 0; }
 /* Aclaración discreta en la esquina: el video es un render propio */
 /* En celular va debajo de las medidas; en escritorio, en la esquina inferior derecha */
 .showcase-credit {
-  order: 4; margin: -16px 0 0; padding: 0 var(--gutter); text-align: center;
+  order: 4; margin: -12px 0 0; padding: 0 var(--gutter); text-align: center;
   font-size: 12px; line-height: 1.4; color: var(--muted);
 }
 /* Zoom suave del video al entrar en pantalla (solo navegadores que lo soportan) */
@@ -365,6 +361,26 @@ section { padding: var(--section-y) 0; }
 }
 
 /* ---------- Tablet ---------- */
+/* ---------- Celular ---------- */
+@media (max-width: 639px) {
+  /* Portada más compacta: al entrar ya se ve la copa del render */
+  .hero { padding: 32px 0 28px; }
+  .hero .tag { margin-bottom: 20px; }
+  .hero .actions { margin-top: 28px; }
+}
+@media (max-width: 479px) {
+  /* Recuadro de precios: etiqueta arriba y precio grande abajo, sin textos partidos */
+  .price-row { flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 0; }
+  .price-row span:first-child { font-size: 13px; }
+  .price-row strong { font-size: 22px; }
+  .price-row strong.red { font-size: 26px; }
+  .mini-prices .list, .mini-prices .transfer { font-size: 22px; }
+  /* Títulos medianos proporcionales al ancho: "@COPASMUNDIALES" es una sola palabra larga
+     y en teléfonos angostos obligaba a la página a ser más ancha que la pantalla */
+  .display-md { font-size: min(36px, 9vw); }
+  /* La franja roja de arriba siempre en una sola línea */
+  .announce { font-size: min(14px, 3.5vw); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
+}
 @media (min-width: 640px) {
   :root { --gutter: 24px; }
   .stats-grid { grid-template-columns: repeat(4, 1fr); }
@@ -382,13 +398,19 @@ section { padding: var(--section-y) 0; }
   /* Vitrina: el video ocupa todo el ancho y el texto flota a los costados de la copa */
   .showcase { padding: 0; gap: 0; flex-direction: row; align-items: center; aspect-ratio: 1920 / 1072; }
   .showcase-video { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
-  .showcase-grid { display: grid; position: relative; grid-template-columns: 1fr 0.9fr 1fr; gap: 32px; align-items: center; }
+  /* Columnas laterales del mismo ancho: el texto y las medidas quedan a la misma distancia de la copa.
+     El ancho se adapta a la pantalla para dejar siempre ~90px o más de aire a cada lado de la copa
+     (la copa ocupa del 39,6% al 60,9% del ancho del video). La derecha va 16px más angosta para
+     compensar que las líneas del texto no llegan justo al borde de su columna. */
+  .showcase-grid {
+    --lado: min(330px, calc(478px - 10.4vw), calc(39.6vw - 122px));
+    display: grid; position: relative; gap: 32px; align-items: center;
+    grid-template-columns: var(--lado) 1fr calc(var(--lado) - 16px);
+  }
   .showcase-grid > [aria-hidden] { display: block; }
   .showcase-copy { padding: 0; text-align: left; order: 0; }
-  .showcase-copy .actions { justify-content: flex-start; }
-  .showcase-copy .muted { margin: 0 0 24px; }
-  .showcase-title span { margin-inline: 0; }
-  .showcase-specs { order: 0; padding: 0; grid-template-columns: 1fr; justify-items: end; text-align: right; gap: 28px; }
+  .showcase-lead { margin: 0; }
+  .showcase-specs { order: 0; padding: 0; grid-template-columns: 1fr; justify-items: start; text-align: left; gap: 28px; }
   .showcase-specs strong { font-size: clamp(40px, 3.6vw, 56px); }
   .showcase-credit {
     position: absolute; z-index: 1; margin: 0; padding: 0; text-align: right;
@@ -415,8 +437,8 @@ section { padding: var(--section-y) 0; }
         <span>Copas<span class="gold">mundiales</span></span>
       </a>
       <nav class="segments" aria-label="Secciones">
-        <a href="#detalles">Detalles</a>
         <a href="#vitrina">Vitrina</a>
+        <a href="#detalles">Detalles</a>
         <a href="#comparacion">Comparación</a>
         <a href="#mini">Mini copa</a>
         <a href="#clientes">Clientes</a>
@@ -431,14 +453,37 @@ section { padding: var(--section-y) 0; }
     <div class="container">
       <p class="tag">24 años de experiencia · +9.800 entregas</p>
       <h1 class="display"><span class="gold line">La Copa del Mundo</span><span class="line">en tu casa, tamaño real</span></h1>
-      <p class="body-lg muted">Réplica modelo italiano, escala 1:1 de 36,8 cm y 3,5 kg maciza. Pintada a mano en oro con la base grabada con todos los campeones. No te dejes engañar: es la copa definitiva.</p>
       <div class="actions">
         <a class="btn" href="https://copasmundiales.empretienda.com.ar/general/copa-del-mundo-tamano-real-version-pintada" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
         <a class="text-link" href="https://www.instagram.com/copasmundiales/" target="_blank" rel="noopener noreferrer">Ver en Instagram</a>
       </div>
+    </div>
+  </section>
 
+  <!-- Vitrina: render de la copa flotando -->
+  <section class="showcase" id="vitrina" aria-label="La copa en 3D">
+    <video class="showcase-video" muted loop playsinline preload="metadata" poster="media/copa-flotando.jpg" aria-label="Render de la Copa del Mundo flotando">
+      <source src="media/copa-flotando.mp4" type="video/mp4">
+    </video>
+    <div class="container showcase-grid">
+      <div class="showcase-copy reveal">
+        <p class="body-lg muted showcase-lead">Réplica modelo italiano, escala 1:1 de 36,8 cm y 3,5 kg maciza. Pintada a mano en oro con la base grabada con todos los campeones. No te dejes engañar: es la copa definitiva.</p>
+      </div>
+      <div aria-hidden="true"></div>
+      <ul class="showcase-specs reveal">
+        <li><strong>1:1</strong><span>escala real</span></li>
+        <li><strong>36,8 cm</strong><span>de alto</span></li>
+        <li><strong>3,5 kg</strong><span>maciza</span></li>
+      </ul>
+    </div>
+    <p class="showcase-credit">Render 3D del trofeo elaborado por Copasmundiales</p>
+  </section>
+
+  <!-- Compra: foto de la copa + recuadro de precios -->
+  <section class="compra" id="comprar">
+    <div class="container">
       <div class="hero-stage">
-        <img class="hero-photo" src="https://d22fxaf9t8d39k.cloudfront.net/656d1ddbaec7fcd3d19f17fd44ff9702950e092bc2848a3c1e416497828c2d18442773.jpg" alt="Réplica de la Copa del Mundo tamaño real pintada en oro" fetchpriority="high">
+        <img class="hero-photo" src="https://d22fxaf9t8d39k.cloudfront.net/656d1ddbaec7fcd3d19f17fd44ff9702950e092bc2848a3c1e416497828c2d18442773.jpg" alt="Réplica de la Copa del Mundo tamaño real pintada en oro" loading="lazy">
         <div class="buy-card">
           <h2 class="subheading">Envío sin cargo a todo el país</h2>
           <p>Excepto Río Grande y Ushuaia.</p>
@@ -474,7 +519,7 @@ section { padding: var(--section-y) 0; }
         <dl class="specs">
           <div class="spec"><dt>Escala</dt><dd>1:1 — tamaño real</dd></div>
           <div class="spec"><dt>Altura</dt><dd>36,8 cm</dd></div>
-          <div class="spec"><dt>Peso</dt><dd>≈ 3,5 kg — maciza</dd></div>
+          <div class="spec"><dt>Peso</dt><dd>3,5 kg aprox. — maciza</dd></div>
           <div class="spec"><dt>Materiales</dt><dd>Escayola, resina y metal de relleno</dd></div>
           <div class="spec"><dt>Terminación</dt><dd>Pintura importada color oro</dd></div>
           <div class="spec"><dt>Base</dt><dd>Campeones grabados, actualizada 2026</dd></div>
@@ -488,30 +533,6 @@ section { padding: var(--section-y) 0; }
         <img src="https://d22fxaf9t8d39k.cloudfront.net/2d607c515b66a41ebeb2a74638086c2d82371f6ec7ec62af76a2f8134385ce95442773.jpg" alt="Detalle 4 de la réplica de la Copa del Mundo" loading="lazy">
       </div>
     </div>
-  </section>
-
-  <!-- Vitrina: render de la copa flotando -->
-  <section class="showcase" id="vitrina" aria-labelledby="vitrina-titulo">
-    <video class="showcase-video" muted loop playsinline preload="metadata" poster="media/copa-flotando.jpg" aria-label="Render de la Copa del Mundo flotando">
-      <source src="media/copa-flotando.mp4" type="video/mp4">
-    </video>
-    <div class="container showcase-grid">
-      <div class="showcase-copy reveal">
-        <p class="tag tag-soft">Réplica modelo italiano</p>
-        <h2 id="vitrina-titulo" class="showcase-title"><span class="gold">La copa</span><span>definitiva</span></h2>
-        <p class="muted">Pintada a mano en oro, con la base grabada con todos los campeones.</p>
-        <div class="actions">
-          <a class="btn" href="https://copasmundiales.empretienda.com.ar/general/copa-del-mundo-tamano-real-version-pintada" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
-        </div>
-      </div>
-      <div aria-hidden="true"></div>
-      <ul class="showcase-specs reveal">
-        <li><strong>1:1</strong><span>escala real</span></li>
-        <li><strong>36,8 cm</strong><span>de alto</span></li>
-        <li><strong>3,5 kg</strong><span>maciza</span></li>
-      </ul>
-    </div>
-    <p class="showcase-credit">Render 3D del trofeo original, elaborado por Copasmundiales</p>
   </section>
 
   <!-- Comparación -->
