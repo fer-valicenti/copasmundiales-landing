@@ -21,23 +21,26 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <style>
 /* Estructura, tipografía, espaciado y formas: sistema "Wise" (DESIGN.md).
-   Colores: paleta original de la landing. El marrón de marca ocupa el rol del verde
-   oscuro de Wise (secciones invertidas) y el dorado el del lima (acento sobre oscuro). */
+   Colores: paleta del logo. El bordó ocupa el rol del verde oscuro de Wise (secciones
+   invertidas y botones), el amarillo manteca el del lima (acento sobre oscuro) y el
+   dorado del trofeo queda como acento sobre los fondos claros. */
 :root {
-  /* Colores originales de COPASMUNDIALES */
-  --paper: oklch(100% 0 0);
-  --fog: oklch(96.5% .008 80);
-  --tint: oklch(96% .012 78);
-  --ink: oklch(15% 0 0);
-  --muted: oklch(48% .02 62);
-  --hairline: oklch(90% .015 75);
-  --brand-brown: oklch(36% .088 52);
-  --brand-brown-mid: oklch(52% .09 58);
-  --brand-gold: oklch(71% .055 68);
-  --brand-red: oklch(53% .21 27);
-  --on-brand: oklch(99% .005 90);
-  --gradient-gold: linear-gradient(100deg, var(--brand-brown) 0%, var(--brand-brown-mid) 45%, var(--brand-gold) 100%);
-  --gradient-red: linear-gradient(100deg, var(--brand-red) 0%, oklch(62% .19 35) 100%);
+  /* Colores del logo de COPASMUNDIALES */
+  --brand-bordo: #940C34;
+  --brand-butter: #FCF48C; /* amarillo manteca */
+  --paper: #FFFFFF;
+  --on-brand: #FFFFFF;     /* texto sobre bordó */
+  /* Fondos claros y textos */
+  --fog: #FBF7EC;          /* crema */
+  --tint: #FCF6DA;         /* manteca suave */
+  --ink: #1E1215;
+  --muted: #6B5A5D;
+  --hairline: #EADFD0;
+  /* Dorado del trofeo (tomado de las fotos de la copa): sombra, medio y brillo metálico */
+  --gold-deep: #8A5A11;
+  --gold-mid: #B8892B;
+  --gold-light: #CFA54C;
+  --gradient-gold: linear-gradient(100deg, var(--gold-deep) 0%, var(--gold-mid) 45%, var(--gold-light) 65%, var(--gold-mid) 100%);
   --whatsapp: #25D366;
 
   --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -70,9 +73,9 @@ h1, h2 { text-wrap: balance; }
 .container { width: 100%; max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
 section { padding: var(--section-y) 0; }
 .fog { background: var(--fog); }
-.dark { background: var(--brand-brown); color: var(--on-brand); }
+.dark { background: var(--brand-bordo); color: var(--on-brand); }
 .gold { background-image: var(--gradient-gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.on-dark-gold { color: var(--brand-gold); }
+.butter { color: var(--brand-butter); }
 
 /* ---------- Tipografía ---------- */
 /* Display: Inter 900 como sustituto de Wise Sans, en bloque y mayúsculas */
@@ -98,17 +101,17 @@ section { padding: var(--section-y) 0; }
   display: inline-flex; align-items: center;
   border-radius: var(--radius-pill);
   padding: 8px 12px;
-  background: color-mix(in oklab, var(--brand-red) 8%, var(--paper));
-  color: var(--brand-red);
+  background: var(--brand-butter);
+  color: var(--brand-bordo);
   font-size: 12px; font-weight: 500; line-height: 1; letter-spacing: -0.003em;
 }
-.tag-soft { background: var(--tint); color: var(--brand-brown); }
+.tag-soft { background: var(--paper); color: var(--brand-bordo); }
 
 /* ---------- Botones (píldoras) ---------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   border: 0; border-radius: var(--radius-pill);
-  background: var(--gradient-gold);
+  background: var(--brand-bordo);
   color: var(--on-brand);
   font: 500 16px/1.5 var(--font-inter); letter-spacing: -0.006em;
   padding: 11px 24px;
@@ -117,11 +120,11 @@ section { padding: var(--section-y) 0; }
 }
 .btn:hover { filter: brightness(1.08); }
 .btn:active { transform: scale(.98); }
-.btn-gold { background: var(--brand-gold); color: var(--brand-brown); font-weight: 600; }
-.btn-outline { background: var(--paper); color: var(--brand-brown); box-shadow: inset 0 0 0 1px var(--brand-brown); }
+.btn-butter { background: var(--brand-butter); color: var(--brand-bordo); font-weight: 600; }
+.btn-outline { background: var(--paper); color: var(--brand-bordo); box-shadow: inset 0 0 0 1px var(--brand-bordo); }
 .btn-sm { font-size: 14px; padding: 8px 16px; }
 .text-link {
-  font-size: 16px; font-weight: 500; color: var(--brand-brown);
+  font-size: 16px; font-weight: 500; color: var(--brand-bordo);
   text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px;
   white-space: nowrap;
 }
@@ -131,7 +134,7 @@ section { padding: var(--section-y) 0; }
 
 /* ---------- Anuncio + navegación ---------- */
 .announce {
-  background: var(--gradient-red);
+  background: var(--brand-bordo);
   color: var(--on-brand);
   text-align: center;
   font-size: 14px; font-weight: 500; line-height: 1.55;
@@ -142,6 +145,7 @@ section { padding: var(--section-y) 0; }
 .brand { display: flex; align-items: center; gap: 10px; margin-right: auto; }
 .brand img { width: 36px; height: 36px; border-radius: 50%; }
 .brand span { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
+.brand > span { color: var(--brand-bordo); }
 .segments {
   display: none;
   padding: 4px; gap: 2px;
@@ -150,7 +154,7 @@ section { padding: var(--section-y) 0; }
 }
 .segments a {
   padding: 8px 14px; border-radius: var(--radius-pill);
-  font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--brand-brown);
+  font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--brand-bordo);
   white-space: nowrap;
   transition: background .15s;
 }
@@ -174,12 +178,12 @@ section { padding: var(--section-y) 0; }
 
 /* Tarjeta oscura de compra (equivalente a la "dark section card" de Wise) */
 .buy-card {
-  background: var(--brand-brown);
+  background: var(--brand-bordo);
   color: var(--on-brand);
   border-radius: var(--radius-large);
   padding: 32px 24px;
 }
-.buy-card h2 { color: var(--brand-gold); }
+.buy-card h2 { color: var(--brand-butter); }
 .buy-card > p { margin-top: 12px; color: color-mix(in oklab, var(--on-brand) 82%, transparent); font-size: 16px; }
 .price-sheet {
   margin-top: 24px;
@@ -190,8 +194,8 @@ section { padding: var(--section-y) 0; }
 .price-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 14px 0; }
 .price-row + .price-row { border-top: 1px solid var(--hairline); }
 .price-row span:first-child { font-size: 14px; color: var(--muted); }
-.price-row strong { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--brand-brown); white-space: nowrap; }
-.price-row strong.red { color: var(--brand-red); font-size: 25px; }
+.price-row strong { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); white-space: nowrap; }
+.price-row strong.transfer { color: var(--brand-bordo); font-size: 25px; }
 .buy-card .btn { width: 100%; margin-top: 20px; }
 
 /* ---------- Stats (fila de rasgos) ---------- */
@@ -216,7 +220,7 @@ section { padding: var(--section-y) 0; }
 /* ---------- Comparación (sección invertida) ---------- */
 .compare { text-align: center; }
 .compare .display-md { max-width: 980px; margin: 0 auto; }
-.compare .display-md .on-dark-gold { display: block; }
+.compare .display-md .butter { display: block; }
 /* En celular, una foto abajo de la otra */
 .compare-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 48px; align-items: start; }
 .compare-grid img { width: 100%; border-radius: var(--radius-large); }
@@ -233,8 +237,8 @@ section { padding: var(--section-y) 0; }
 .feature-body .tag { align-self: flex-start; margin-bottom: 20px; }
 .feature-body .muted { margin-top: 12px; }
 .mini-prices { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin: 24px 0 28px; }
-.mini-prices .list { font-size: 25px; font-weight: 700; color: var(--brand-brown); letter-spacing: -0.015em; }
-.mini-prices .transfer { font-size: 25px; font-weight: 700; color: var(--brand-red); letter-spacing: -0.015em; }
+.mini-prices .list { font-size: 25px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; }
+.mini-prices .transfer { font-size: 25px; font-weight: 700; color: var(--brand-bordo); letter-spacing: -0.015em; }
 .mini-prices .caption { flex-basis: 100%; color: var(--muted); }
 
 /* ---------- Clientes ---------- */
@@ -255,11 +259,11 @@ section { padding: var(--section-y) 0; }
 .circle-btn {
   width: 44px; height: 44px; border-radius: 50%;
   display: grid; place-items: center;
-  border: 0; background: var(--paper); color: var(--brand-brown);
-  box-shadow: inset 0 0 0 1px var(--brand-brown);
+  border: 0; background: var(--paper); color: var(--brand-bordo);
+  box-shadow: inset 0 0 0 1px var(--brand-bordo);
   cursor: pointer; transition: background .15s, color .15s;
 }
-.circle-btn:hover { background: var(--brand-brown); color: var(--on-brand); }
+.circle-btn:hover { background: var(--brand-bordo); color: var(--on-brand); }
 .circle-btn svg { width: 20px; height: 20px; }
 
 /* ---------- FAQ ---------- */
@@ -276,7 +280,7 @@ section { padding: var(--section-y) 0; }
 .faq-list .icon {
   flex: none; width: 32px; height: 32px; border-radius: 50%;
   display: grid; place-items: center;
-  background: var(--paper); color: var(--brand-brown);
+  background: var(--paper); color: var(--brand-bordo);
 }
 .faq-list .icon svg { width: 18px; height: 18px; transition: transform .2s; }
 .faq-list details[open] .icon svg { transform: rotate(180deg); }
@@ -284,7 +288,7 @@ section { padding: var(--section-y) 0; }
 
 /* ---------- CTA final (invertida) ---------- */
 .final { text-align: center; padding: 96px 0; }
-.final .display { color: var(--brand-gold); }
+.final .display { color: var(--brand-butter); }
 .final p { margin: 24px auto 36px; max-width: 560px; color: color-mix(in oklab, var(--on-brand) 82%, transparent); }
 
 /* ---------- Footer ---------- */
@@ -373,7 +377,7 @@ section { padding: var(--section-y) 0; }
   .price-row { flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 0; }
   .price-row span:first-child { font-size: 13px; }
   .price-row strong { font-size: 22px; }
-  .price-row strong.red { font-size: 26px; }
+  .price-row strong.transfer { font-size: 26px; }
   .mini-prices .list, .mini-prices .transfer { font-size: 22px; }
   /* Títulos medianos proporcionales al ancho: "@COPASMUNDIALES" es una sola palabra larga
      y en teléfonos angostos obligaba a la página a ser más ancha que la pantalla */
@@ -490,9 +494,9 @@ section { padding: var(--section-y) 0; }
           <div class="price-sheet">
             <div class="price-row"><span>Precio</span><strong>$230.000,00</strong></div>
             <div class="price-row"><span>o 3 cuotas sin interés de</span><strong>$76.666,67</strong></div>
-            <div class="price-row"><span>con transferencia (10% OFF)</span><strong class="red">$207.000,00</strong></div>
+            <div class="price-row"><span>con transferencia (10% OFF)</span><strong class="transfer">$207.000,00</strong></div>
           </div>
-          <a class="btn btn-gold" href="https://copasmundiales.empretienda.com.ar/general/copa-del-mundo-tamano-real-version-pintada" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+          <a class="btn btn-butter" href="https://copasmundiales.empretienda.com.ar/general/copa-del-mundo-tamano-real-version-pintada" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
         </div>
       </div>
     </div>
@@ -538,7 +542,7 @@ section { padding: var(--section-y) 0; }
   <!-- Comparación -->
   <section class="dark compare" id="comparacion">
     <div class="container">
-      <h2 class="display-md reveal"><span class="on-dark-gold">¡Mano a mano!</span> Comparamos la réplica con el trofeo original</h2>
+      <h2 class="display-md reveal"><span class="butter">¡Mano a mano!</span> Comparamos la réplica con el trofeo original</h2>
       <div class="compare-grid reveal">
         <img src="https://d22fxaf9t8d39k.cloudfront.net/a952c8597f7c45551c8fec1821c2a3bbf44ceab031c73382555a324345281f3b442773.jpg" alt="Copa del Mundo réplica, foto 1" loading="lazy">
         <img src="https://d22fxaf9t8d39k.cloudfront.net/01cf7f325188d27a09e1f45f57b47fa7f6ef162c74bbdb37b74f65516c331053442773.jpg" alt="Copa del Mundo réplica, foto 2" loading="lazy">
@@ -625,7 +629,7 @@ section { padding: var(--section-y) 0; }
     <div class="container reveal">
       <h2 class="display">Levantá la copa</h2>
       <p class="body-lg">Stock limitado. Los pedidos se envían durante octubre, en orden de reserva.</p>
-      <a class="btn btn-gold" href="https://copasmundiales.empretienda.com.ar/general/copa-del-mundo-tamano-real-version-pintada" target="_blank" rel="noopener noreferrer">Comprar ahora — $207.000,00</a>
+      <a class="btn btn-butter" href="https://copasmundiales.empretienda.com.ar/general/copa-del-mundo-tamano-real-version-pintada" target="_blank" rel="noopener noreferrer">Comprar ahora — $207.000,00</a>
     </div>
   </section>
 
