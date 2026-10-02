@@ -714,5 +714,21 @@ section { padding: var(--section-y) 0; }
   items.forEach(function (el) { io.observe(el); });
 })();
 </script>
+<!-- Eventos del Meta Pixel: clic en comprar y en WhatsApp -->
+<script>
+document.addEventListener("click", function (e) {
+  if (typeof fbq !== "function") return;
+  var a = e.target.closest ? e.target.closest("a[href]") : null;
+  if (!a) return;
+  var href = a.getAttribute("href") || "";
+  if (href.indexOf("empretienda.com.ar") !== -1) {
+    fbq("track", "InitiateCheckout", {
+      content_name: href.indexOf("mini-copa") !== -1 ? "Mini copa 18 cm" : "Copa tamaño real"
+    });
+  } else if (href.indexOf("api.whatsapp.com") !== -1 || href.indexOf("wa.me") !== -1) {
+    fbq("track", "Contact");
+  }
+}, true);
+</script>
 </body>
 </html>
