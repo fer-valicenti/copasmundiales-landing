@@ -9,10 +9,6 @@ const URLS = {
   mini: "https://copasmundiales.empretienda.com.ar/general/mini-copa-del-mundo-18-cm",
 };
 
-// Todos los productos de la tienda figuran en el sitemap (/<categoria>/<producto>). Si aparece uno que la
-// landing no conoce, el control final falla para que se avise y se decida si se suma a la página.
-const SITEMAP_URL = "https://copasmundiales.empretienda.com.ar/sitemap.xml";
-
 const PRICE_RE = /\$[0-9]{1,3}(?:\.[0-9]{3})*,[0-9]{2}/g;
 const STATS_RE = /(\d+)\s*años de experiencia y más de\s*(\d+)\s*entregas/;
 
@@ -40,11 +36,7 @@ async function main() {
   const state = JSON.parse(fs.readFileSync(STATE_PATH, "utf8"));
   let html = fs.readFileSync(HTML_PATH, "utf8");
 
-  const [realHtml, miniHtml, sitemapXml] = await Promise.all([
-    fetchText(URLS.realSize),
-    fetchText(URLS.mini),
-    fetchText(SITEMAP_URL).catch(() => null), // si falla, no frena los precios: queda en el control final
-  ]);
+  const [realHtml, miniHtml] = await Promise.all([fetchText(URLS.realSize), fetchText(URLS.mini)]);
 
   const realPrices = realHtml.match(PRICE_RE);
   const miniPrices = miniHtml.match(PRICE_RE);
@@ -133,25 +125,6 @@ async function main() {
     `<p class="stat-num"[^>]*>${fresh.aniosExperiencia}</p>\\s*<p class="stat-label"[^>]*>años de experiencia</p>`
   );
   if (!statRe.test(html)) problemas.push(`Años de experiencia (stat): no encontré el bloque con "${fresh.aniosExperiencia}"`);
-  // Productos nuevos en la tienda: cualquier /<categoria>/<producto> del sitemap que no sea uno de los dos
-  // de la landing ni esté en "ignoredProducts" del estado (productos que se decidió no mostrar).
-  if (!sitemapXml) {
-    problemas.push(`No pude leer el sitemap de Empretienda (${SITEMAP_URL}) para buscar productos nuevos`);
-  } else {
-    const normalizar = (u) => u.trim().replace(/\/+$/, "").toLowerCase();
-    const conocidos = new Set([...Object.values(URLS), ...(state.ignoredProducts || [])].map(normalizar));
-    const productos = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)]
-      .map((m) => m[1])
-      .filter((u) => new URL(u).pathname.split("/").filter(Boolean).length >= 2);
-    const nuevos = productos.filter((u) => !conocidos.has(normalizar(u)));
-    if (!productos.length) problemas.push("El sitemap de Empretienda no lista ningún producto (¿cambió el formato?)");
-    if (nuevos.length) {
-      problemas.push(
-        `Hay ${nuevos.length} producto(s) nuevo(s) en Empretienda que la landing no muestra: ${nuevos.join(", ")}. ` +
-          'Sumarlo(s) a la landing, o agregarlo(s) a "ignoredProducts" en scripts/empretienda-sync-state.json si no van.'
-      );
-    }
-  }
   if (!fresh.mesEnvio) {
     problemas.push('No pude leer el mes de envío en Empretienda ("LA COMPRA SE ENVIA DURANTE EL MES DE ..."): ¿cambió el texto?');
   } else {
