@@ -18,7 +18,11 @@ jobs:
         with:
           node-version: "20"
 
+      # Si el control final encuentra algo raro (p. ej. un producto nuevo), igual se publican los precios y el
+      # mes que sí se pudieron actualizar; después el paso final deja la corrida en rojo para que se vea.
       - name: Run sync script
+        id: sync
+        continue-on-error: true
         run: node scripts/sync-empretienda.js
 
       - name: Commit and push if changed
@@ -32,3 +36,9 @@ jobs:
           else
             echo "Sin cambios para commitear."
           fi
+
+      - name: Fail if the control found problems
+        if: steps.sync.outcome == 'failure'
+        run: |
+          echo "El control del sync encontró problemas (ver el paso 'Run sync script')."
+          exit 1

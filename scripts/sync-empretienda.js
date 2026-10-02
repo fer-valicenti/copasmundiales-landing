@@ -12,6 +12,16 @@ const URLS = {
 const PRICE_RE = /\$[0-9]{1,3}(?:\.[0-9]{3})*,[0-9]{2}/g;
 const STATS_RE = /(\d+)\s*años de experiencia y más de\s*(\d+)\s*entregas/;
 
+// Mes de envío: Empretienda lo dice en la descripción de la copa tamaño real ("LA COMPRA SE ENVIA DURANTE
+// EL MES DE NOVIEMBRE"). La landing lo repite en dos frases; si se reescriben, hay que cambiar estas
+// expresiones también (el control final avisa si no las encuentra).
+const MESES = "enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre";
+const MES_ENVIO_RE = new RegExp(`LA COMPRA SE ENVIA DURANTE EL MES DE\\s+(${MESES})\\b`, "i");
+const FRASES_MES_ENVIO = [
+  { label: "Mes de envío (pregunta frecuente)", re: new RegExp(`(Los pedidos se despachan durante el mes de )(${MESES})(, en orden de reserva)`) },
+  { label: "Mes de envío (cierre)", re: new RegExp(`(Los pedidos se envían durante )(${MESES})(, en orden de reserva)`) },
+];
+
 function formatThousands(n) {
   return Number(n).toLocaleString("es-AR");
 }
@@ -31,6 +41,7 @@ async function main() {
   const realPrices = realHtml.match(PRICE_RE);
   const miniPrices = miniHtml.match(PRICE_RE);
   const statsMatch = realHtml.match(STATS_RE);
+  const mesMatch = realHtml.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").match(MES_ENVIO_RE);
 
   if (!realPrices || realPrices.length < 3) throw new Error("No pude leer los 3 precios de la copa tamaño real en Empretienda (¿cambió el diseño de la página?)");
   if (!miniPrices || miniPrices.length < 2) throw new Error("No pude leer los 2 precios de la mini copa en Empretienda (¿cambió el diseño de la página?)");
@@ -41,6 +52,8 @@ async function main() {
     mini: { listPrice: miniPrices[0], transferPrice: miniPrices[1] },
     aniosExperiencia: statsMatch[1],
     entregas: "+" + formatThousands(statsMatch[2]),
+    // Si Empretienda dejara de decir el mes, no se frena la actualización de precios: queda en el control final.
+    mesEnvio: mesMatch ? mesMatch[1].toLowerCase() : null,
   };
 
   const changes = [];
@@ -80,6 +93,18 @@ async function main() {
     applyGlobalReplace("Años de experiencia (frase)", `${state.aniosExperiencia} años de experiencia`, `${fresh.aniosExperiencia} años de experiencia`);
   }
 
+  // Mes de envío: se reemplaza por contexto (la frase completa), no el nombre del mes suelto.
+  if (fresh.mesEnvio) {
+    for (const { label, re } of FRASES_MES_ENVIO) {
+      const m = html.match(re);
+      if (m && m[2] !== fresh.mesEnvio) {
+        html = html.replace(re, `$1${fresh.mesEnvio}$3`);
+        changes.push(`${label}: ${m[2]} -> ${fresh.mesEnvio}`);
+        changed = true;
+      }
+    }
+  }
+
   // Control final, en cada corrida: la página tiene que mostrar exactamente lo que dice Empretienda.
   // Si algo no cuadra, el script falla (la corrida queda en rojo y GitHub avisa por mail) en vez de
   // dejar un aviso que al día siguiente desaparece.
@@ -100,6 +125,15 @@ async function main() {
     `<p class="stat-num"[^>]*>${fresh.aniosExperiencia}</p>\\s*<p class="stat-label"[^>]*>años de experiencia</p>`
   );
   if (!statRe.test(html)) problemas.push(`Años de experiencia (stat): no encontré el bloque con "${fresh.aniosExperiencia}"`);
+  if (!fresh.mesEnvio) {
+    problemas.push('No pude leer el mes de envío en Empretienda ("LA COMPRA SE ENVIA DURANTE EL MES DE ..."): ¿cambió el texto?');
+  } else {
+    for (const { label, re } of FRASES_MES_ENVIO) {
+      const m = html.match(re);
+      if (!m) problemas.push(`${label}: no encontré la frase en la página`);
+      else if (m[2] !== fresh.mesEnvio) problemas.push(`${label}: la página dice "${m[2]}" y Empretienda "${fresh.mesEnvio}"`);
+    }
+  }
   const preciosValidos = new Set([...Object.values(fresh.realSize), ...Object.values(fresh.mini)]);
   const preciosDeMas = [...new Set(html.match(PRICE_RE) || [])].filter((p) => !preciosValidos.has(p));
   if (preciosDeMas.length) problemas.push(`La página muestra precios que no están en Empretienda: ${preciosDeMas.join(", ")}`);
