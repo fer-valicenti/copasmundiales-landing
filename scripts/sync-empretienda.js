@@ -22,6 +22,14 @@ const FRASES_MES_ENVIO = [
   { label: "Mes de envío (cierre)", re: new RegExp(`(Los pedidos se envían durante )(${MESES})(, en orden de reserva)`) },
 ];
 
+// Datos para Google (JSON-LD, producto): el precio de lista de la copa tamaño real sale del mismo precio
+// de Empretienda ("$230.000,00" -> "230000.00"). Si el bloque no está en index.html, solo se avisa.
+const LD_RE = /(<script type="application\/ld\+json" id="ld-producto">)([\s\S]*?)(<\/script>)/;
+
+function precioParaJsonLd(precio) {
+  return precio.replace("$", "").replace(/\./g, "").replace(",", ".");
+}
+
 function formatThousands(n) {
   return Number(n).toLocaleString("es-AR");
 }
@@ -105,10 +113,33 @@ async function main() {
     }
   }
 
+  // Datos para Google (JSON-LD): mismo precio de lista que la página.
+  let ldError = null;
+  const ldMatch = html.match(LD_RE);
+  if (!ldMatch) {
+    changes.push('AVISO: no encontré el bloque JSON-LD id="ld-producto" en index.html (datos para Google) — no se actualizó.');
+  } else {
+    try {
+      const ld = JSON.parse(ldMatch[2]);
+      if (!ld.offers) throw new Error('no tiene "offers"');
+      const precioLd = precioParaJsonLd(fresh.realSize.listPrice);
+      if (ld.offers.price !== precioLd) {
+        const anterior = ld.offers.price;
+        ld.offers.price = precioLd;
+        html = html.replace(LD_RE, (_m, abre, _json, cierra) => `${abre}\n${JSON.stringify(ld, null, 2)}\n${cierra}`);
+        changes.push(`Precio en los datos para Google (JSON-LD): ${anterior} -> ${precioLd}`);
+        changed = true;
+      }
+    } catch (e) {
+      ldError = `Datos para Google (JSON-LD): no pude leer el bloque (${e.message})`;
+    }
+  }
+
   // Control final, en cada corrida: la página tiene que mostrar exactamente lo que dice Empretienda.
   // Si algo no cuadra, el script falla (la corrida queda en rojo y GitHub avisa por mail) en vez de
   // dejar un aviso que al día siguiente desaparece.
   const problemas = [];
+  if (ldError) problemas.push(ldError);
   const debeEstar = [
     ["Precio lista (tamaño real)", fresh.realSize.listPrice],
     ["Precio transferencia (tamaño real)", fresh.realSize.transferPrice],
