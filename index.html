@@ -831,24 +831,30 @@ document.addEventListener("click", function (e) {
   }
 }, true);
 </script>
-<!-- Aviso de compras internacionales: solo para quien está fuera de Argentina (según la zona horaria del
-     dispositivo; no usa ningún servicio externo). El texto va en español o inglés según el idioma del
-     navegador, y el link abre WhatsApp con un mensaje de consulta internacional ya escrito. -->
+<!-- Burbuja junto al botón de WhatsApp (según la zona horaria del dispositivo; no usa ningún servicio
+     externo). En Argentina invita a escribir si surge una duda. Fuera de Argentina avisa que se hacen
+     envíos internacionales, en español o inglés según el idioma del navegador. En los dos casos el link
+     abre WhatsApp con un mensaje ya escrito. -->
 <script>
 (function () {
   var nota = document.getElementById("intl-note");
   if (!nota) return;
   var zona = "";
   try { zona = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
-  // Si no se puede leer la zona horaria se asume Argentina y no se muestra nada.
-  if (!zona || /^America\/(Argentina\/|Buenos_Aires$|Cordoba$|Catamarca$|Jujuy$|Mendoza$|Rosario$)/.test(zona)) return;
-  var CLAVE = "aviso-internacional-cerrado", SIETE_DIAS = 7 * 24 * 60 * 60 * 1000;
+  // Si no se puede leer la zona horaria se asume Argentina.
+  var argentina = !zona || /^America\/(Argentina\/|Buenos_Aires$|Cordoba$|Catamarca$|Jujuy$|Mendoza$|Rosario$)/.test(zona);
+  var CLAVE = argentina ? "aviso-duda-cerrado" : "aviso-internacional-cerrado", SIETE_DIAS = 7 * 24 * 60 * 60 * 1000;
   try {
     var cerrado = Number(localStorage.getItem(CLAVE));
     if (cerrado && Date.now() - cerrado < SIETE_DIAS) return;
   } catch (e) {}
   var es = /^es/i.test(navigator.language || "");
-  var t = es ? {
+  var t = argentina ? {
+    titulo: "¿Te surgió alguna duda?",
+    texto: "Escribinos por WhatsApp y te respondemos a la brevedad.",
+    mensaje: "¡Hola! Estuve viendo la web de Copas Mundiales y tengo una consulta.",
+    cerrar: "Cerrar aviso"
+  } : es ? {
     titulo: "¿Comprás desde fuera de Argentina?",
     texto: "Hacemos envíos internacionales por DHL. Escribinos por WhatsApp.",
     mensaje: "¡Hola! Vi la web de Copas Mundiales y quiero consultar por un envío al exterior.",
@@ -859,7 +865,7 @@ document.addEventListener("click", function (e) {
     mensaje: "Hi! I saw the Copas Mundiales website and I'd like to ask about an international order.",
     cerrar: "Close notice"
   };
-  nota.lang = es ? "es" : "en";
+  nota.lang = (argentina || es) ? "es" : "en";
   nota.querySelector(".intl-note-title").textContent = t.titulo;
   nota.querySelector(".intl-note-text").textContent = t.texto;
   var link = nota.querySelector(".intl-note-link");
