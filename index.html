@@ -467,9 +467,11 @@ section { padding: var(--section-y) 0; }
 @media (min-width: 640px) { .opiniones-panel { padding: 64px 48px 68px; } }
 
 /* ---------- FAQ ---------- */
+/* Fondo crema para separarla de la sección de opiniones (blanca); las preguntas son tarjetas blancas. */
+.faq { background: var(--fog); }
 .faq .display-md { text-align: center; margin-bottom: 40px; }
 .faq-list { max-width: 860px; margin: 0 auto; display: grid; gap: 12px; }
-.faq-list details { background: var(--fog); border-radius: 16px; }
+.faq-list details { background: var(--paper); border: 1px solid var(--hairline); border-radius: 16px; }
 .faq-list summary {
   list-style: none; cursor: pointer;
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
@@ -480,7 +482,7 @@ section { padding: var(--section-y) 0; }
 .faq-list .icon {
   flex: none; width: 32px; height: 32px; border-radius: 50%;
   display: grid; place-items: center;
-  background: var(--paper); color: var(--brand-bordo);
+  background: var(--fog); color: var(--brand-bordo);
 }
 .faq-list .icon svg { width: 18px; height: 18px; transition: transform .2s; }
 .faq-list details[open] .icon svg { transform: rotate(180deg); }
