@@ -452,7 +452,6 @@ section { padding: var(--section-y) 0; }
   .opiniones-cta .btn { padding-inline: 18px; font-size: 15px; }
 }
 .opiniones-cta .btn svg { width: 18px; height: 18px; fill: currentColor; }
-.opiniones-nota { margin-top: 14px; font-size: 13px; color: var(--muted); }
 .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 1040px; margin: 40px auto 0; text-align: left; }
 .review {
   margin: 0; padding: 22px; background: var(--paper);
@@ -863,19 +862,6 @@ section { padding: var(--section-y) 0; }
     </div>
   </section>
 
-  <!-- Opiniones: invita a dejar una reseña en Google (todavía no hay reseñas para mostrar) -->
-  <section class="opiniones" id="resenas">
-    <div class="container">
-      <div class="opiniones-panel reveal">
-        <div class="stars" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg></div>
-        <h2 class="display-md">Tu opinión <span class="gold">cuenta</span></h2>
-        <p class="lead body-lg muted">¿Ya recibiste tu copa? Contanos cómo te fue en Google. Te lleva menos de un minuto y ayuda a que más personas se animen.</p>
-        <p class="opiniones-cta"><a class="btn" href="https://g.page/r/CbDd-pdbmlhoECE/review" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg>Dejar mi reseña en Google</a></p>
-        <p class="opiniones-nota">Se abre Google en una pestaña nueva.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- Clientes -->
   <section class="fog" id="clientes">
     <div class="container">
@@ -898,6 +884,18 @@ section { padding: var(--section-y) 0; }
       <div class="strip-controls">
         <button class="circle-btn" type="button" data-strip="strip-clientes" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
         <button class="circle-btn" type="button" data-strip="strip-clientes" data-dir="1" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Opiniones: invita a dejar una reseña en Google (todavía no hay reseñas para mostrar) -->
+  <section class="opiniones" id="resenas">
+    <div class="container">
+      <div class="opiniones-panel reveal">
+        <div class="stars" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg></div>
+        <h2 class="display-md">Tu opinión <span class="gold">cuenta</span></h2>
+        <p class="lead body-lg muted">¿Ya recibiste tu copa? Contanos cómo te fue en Google. Te lleva menos de un minuto y ayuda a que más personas se animen.</p>
+        <p class="opiniones-cta"><a class="btn" href="https://g.page/r/CbDd-pdbmlhoECE/review" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg>Dejar mi reseña en Google</a></p>
       </div>
     </div>
   </section>
