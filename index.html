@@ -431,6 +431,41 @@ section { padding: var(--section-y) 0; }
   .reel:hover .reel-ring { transform: none; box-shadow: 0 36px 70px rgb(0 0 0 / .45), 0 0 80px rgb(252 244 140 / .28); }
 }
 
+/* ---------- Opiniones en Google ---------- */
+/* La sección invita a dejar una reseña (enlace oficial de Google). Cuando haya reseñas reales se suman acá
+   como <figure class="review"> dentro de <div class="review-grid">, sin inventar ninguna. */
+.opiniones { text-align: center; }
+.opiniones-panel {
+  max-width: 880px; margin: 0 auto; padding: 48px 24px 52px;
+  background: linear-gradient(160deg, var(--tint), var(--paper) 70%);
+  border: 1px solid var(--hairline); border-radius: var(--radius-large);
+  box-shadow: 0 18px 50px rgb(148 12 52 / .08);
+}
+.stars { display: inline-flex; gap: 4px; margin-bottom: 20px; }
+.stars svg { width: 28px; height: 28px; fill: var(--gold-mid); filter: drop-shadow(0 2px 6px rgb(185 140 40 / .35)); }
+.opiniones .display-md { max-width: 760px; margin: 0 auto; }
+.opiniones .lead { max-width: 560px; margin: 20px auto 0; }
+.opiniones-cta { margin-top: 32px; }
+.opiniones-cta .btn { gap: 10px; max-width: 100%; }
+@media (max-width: 359px) {
+  .opiniones-panel { padding-inline: 14px; }
+  .opiniones-cta .btn { padding-inline: 18px; font-size: 15px; }
+}
+.opiniones-cta .btn svg { width: 18px; height: 18px; fill: currentColor; }
+.review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 1040px; margin: 40px auto 0; text-align: left; }
+.review {
+  margin: 0; padding: 22px; background: var(--paper);
+  border: 1px solid var(--hairline); border-radius: 24px;
+  box-shadow: 0 8px 24px rgb(30 18 21 / .05);
+}
+.review .stars { margin-bottom: 12px; }
+.review .stars svg { width: 18px; height: 18px; }
+.review blockquote { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink); }
+.review figcaption { display: flex; align-items: center; gap: 12px; margin-top: 18px; font-size: 14px; line-height: 1.3; color: var(--muted); }
+.review figcaption strong { display: block; color: var(--ink); font-size: 15px; }
+.review-avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--brand-bordo); color: var(--on-brand); font-weight: 700; }
+@media (min-width: 640px) { .opiniones-panel { padding: 64px 48px 68px; } }
+
 /* ---------- FAQ ---------- */
 .faq .display-md { text-align: center; margin-bottom: 40px; }
 .faq-list { max-width: 860px; margin: 0 auto; display: grid; gap: 12px; }
@@ -849,6 +884,18 @@ section { padding: var(--section-y) 0; }
       <div class="strip-controls">
         <button class="circle-btn" type="button" data-strip="strip-clientes" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
         <button class="circle-btn" type="button" data-strip="strip-clientes" data-dir="1" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Opiniones: invita a dejar una reseña en Google (todavía no hay reseñas para mostrar) -->
+  <section class="opiniones" id="resenas">
+    <div class="container">
+      <div class="opiniones-panel reveal">
+        <div class="stars" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg></div>
+        <h2 class="display-md">Tu opinión <span class="gold">cuenta</span></h2>
+        <p class="lead body-lg muted">¿Ya recibiste tu copa? Contanos cómo te fue en Google. Te lleva menos de un minuto y ayuda a que más personas se animen.</p>
+        <p class="opiniones-cta"><a class="btn" href="https://g.page/r/CbDd-pdbmlhoECE/review" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg>Dejar mi reseña en Google</a></p>
       </div>
     </div>
   </section>
