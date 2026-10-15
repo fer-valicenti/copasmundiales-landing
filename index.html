@@ -452,12 +452,29 @@ section { padding: var(--section-y) 0; }
   .opiniones-cta .btn { padding-inline: 18px; font-size: 15px; }
 }
 .opiniones-cta .btn svg { width: 18px; height: 18px; fill: currentColor; }
-.review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 1040px; margin: 40px auto 0; text-align: left; }
+.reviews-lead { margin-top: 56px; font-size: 18px; font-weight: 600; letter-spacing: -0.006em; color: var(--ink); }
+.review-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; max-width: 1040px; margin: 24px auto 0; text-align: left; }
+.review-grid .review { flex: 0 1 320px; }
+.reviews-controls { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+.reviews-controls[hidden] { display: none; }
+.reviews-more { margin-top: 28px; }
+@media (max-width: 819px) {
+  .review-grid {
+    flex-wrap: nowrap; justify-content: safe center; max-width: none;
+    margin-inline: calc(var(--gutter) * -1); padding: 8px var(--gutter) 12px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none;
+  }
+  .review-grid::-webkit-scrollbar { display: none; }
+  .review-grid .review { flex: 0 0 min(300px, 82vw); scroll-snap-align: start; }
+}
+@media (min-width: 820px) { .reviews-controls { display: none; } }
 .review {
   margin: 0; padding: 22px; background: var(--paper);
   border: 1px solid var(--hairline); border-radius: 24px;
   box-shadow: 0 8px 24px rgb(30 18 21 / .05);
 }
+.review { display: flex; flex-direction: column; }
+.review blockquote { flex: 1; }
 .review .stars { margin-bottom: 12px; }
 .review .stars svg { width: 18px; height: 18px; }
 .review blockquote { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink); }
@@ -897,6 +914,39 @@ section { padding: var(--section-y) 0; }
         <p class="lead body-lg muted">¿Ya recibiste tu copa? Contanos cómo te fue en Google. Te lleva menos de un minuto y ayuda a que más personas se animen.</p>
         <p class="opiniones-cta"><a class="btn" href="https://g.page/r/CbDd-pdbmlhoECE/review" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg>Dejar mi reseña en Google</a></p>
       </div>
+      <p class="reviews-lead reveal">Lo que dicen quienes ya tienen su copa</p>
+      <div class="review-grid reveal" id="strip-resenas">
+        <figure class="review">
+          <div class="stars" role="img" aria-label="5 estrellas de 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg></div>
+          <blockquote><p>Excelente réplica de la Copa Mundial! Cada detalle, el color, el peso, las medidas, una maravilla de trabajo.</p></blockquote>
+          <figcaption><span class="review-avatar" aria-hidden="true">E</span><span><strong>Elizabeth</strong>Reseña en Google</span></figcaption>
+        </figure>
+        <figure class="review">
+          <div class="stars" role="img" aria-label="5 estrellas de 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg></div>
+          <blockquote><p>Una pieza realmente hermosa. El nivel de detalle y estética es increíble... Al tacto emociona!.. lo que pesa ☺️las inscripciones de la base... El verde idéntico a la original.... Realmente un placer, poder tener semejante obra de arte en casa... Mirarla todos los días, y sonreír!!! ⭐⭐⭐</p></blockquote>
+          <figcaption><span class="review-avatar" aria-hidden="true">L</span><span><strong>Leo Rey</strong>Reseña en Google</span></figcaption>
+        </figure>
+        <figure class="review">
+          <div class="stars" role="img" aria-label="5 estrellas de 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg></div>
+          <blockquote><p>Tengo una de estas obras de arte en casa y sinceramente son increíbles, el nivel de detalle y la perfección que manejan no se pueden creer! No seré Messi pero yo también se cuánto pesa!!!</p></blockquote>
+          <figcaption><span class="review-avatar" aria-hidden="true">M</span><span><strong>Maximiliano Samaruga</strong>Reseña en Google</span></figcaption>
+        </figure>
+        <figure class="review">
+          <div class="stars" role="img" aria-label="5 estrellas de 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg></div>
+          <blockquote><p>La verdad increíble! El nivel de detalle y el laburo que hacen es una locura, las mejores copas lejos! Y Julian un crack</p></blockquote>
+          <figcaption><span class="review-avatar" aria-hidden="true">N</span><span><strong>Nicolas Diaz Maidana</strong>Reseña en Google</span></figcaption>
+        </figure>
+        <figure class="review">
+          <div class="stars" role="img" aria-label="5 estrellas de 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.7 6.1 20.8l1.2-6.5L2.5 9.7l6.6-.9z"/></svg></div>
+          <blockquote><p>Un lujo! Idéntica a la original!! Se recomienda a full!</p></blockquote>
+          <figcaption><span class="review-avatar" aria-hidden="true">J</span><span><strong>Julio German</strong>Reseña en Google</span></figcaption>
+        </figure>
+      </div>
+      <div class="reviews-controls">
+        <button class="circle-btn" type="button" data-strip="strip-resenas" data-dir="-1" aria-label="Reseña anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button class="circle-btn" type="button" data-strip="strip-resenas" data-dir="1" aria-label="Reseña siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+      <p class="reviews-more reveal"><a class="text-link" href="https://www.google.com/maps?cid=7518929296077544880&hl=es" target="_blank" rel="noopener noreferrer">Ver todas las reseñas en Google</a></p>
     </div>
   </section>
 
@@ -1114,6 +1164,15 @@ document.addEventListener("click", function (e) {
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) tarjetas.forEach(function (t) { t.querySelector("video").pause(); });
   });
+})();
+</script>
+<script>
+(function () {
+  var tira = document.getElementById("strip-resenas"), flechas = document.querySelector(".reviews-controls");
+  if (!tira || !flechas) return;
+  function ajustar() { flechas.hidden = tira.scrollWidth <= tira.clientWidth + 2; }
+  ajustar();
+  window.addEventListener("resize", ajustar);
 })();
 </script>
 </body>
