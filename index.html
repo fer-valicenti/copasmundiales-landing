@@ -344,6 +344,93 @@ section { padding: var(--section-y) 0; }
 .circle-btn:hover { background: var(--brand-bordo); color: var(--on-brand); }
 .circle-btn svg { width: 20px; height: 20px; }
 
+/* ---------- Reels de Instagram ---------- */
+/* Los dos reels se reproducen solos (sin sonido, en bucle) cuando se ven en pantalla; ver el script al final.
+   Marco al estilo de Instagram: encabezado con el perfil, barra de progreso, pie con el enlace al reel. */
+.reels {
+  --reel-w: min(340px, 78vw);
+  position: relative; overflow: hidden; text-align: center;
+  background:
+    radial-gradient(60% 45% at 15% 0%, rgb(252 244 140 / .18), transparent 65%),
+    radial-gradient(55% 45% at 100% 100%, rgb(255 255 255 / .09), transparent 65%),
+    var(--brand-bordo);
+}
+.reels .container { position: relative; }
+.reels .tag { gap: 8px; }
+.reels .tag svg { width: 14px; height: 14px; }
+.reels .display-md { max-width: 980px; margin: 20px auto 0; }
+.reels .display-md .butter { display: block; }
+.reels-lead { max-width: 560px; margin: 20px auto 0; color: color-mix(in oklab, var(--on-brand) 82%, transparent); }
+/* La tira llega hasta los bordes de la pantalla y deja aire arriba, abajo y a los costados para que el brillo
+   y la sombra de las tarjetas no se corten contra el borde del carrusel. */
+.reels-strip {
+  display: flex; justify-content: safe center; gap: 20px; margin: -4px calc(var(--gutter) * -1) 0; padding: 64px var(--gutter) 76px;
+  overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none;
+}
+.reels-strip::-webkit-scrollbar { display: none; }
+.reel { flex: 0 0 var(--reel-w); scroll-snap-align: start; }
+/* Anillo de color alrededor del teléfono (manteca, blanco y dorado) */
+.reel-ring {
+  padding: 3px; border-radius: 38px;
+  background: linear-gradient(145deg, var(--brand-butter), #fff 45%, var(--gold-mid));
+  box-shadow: 0 30px 60px rgb(0 0 0 / .38), 0 0 60px rgb(252 244 140 / .16);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.reel-phone {
+  position: relative; aspect-ratio: 9 / 16; border-radius: 35px; overflow: hidden;
+  background: #120508; color: #fff; text-align: left;
+}
+.reel-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #120508; }
+.reel-tap { position: absolute; inset: 0; z-index: 1; width: 100%; border: 0; background: transparent; cursor: pointer; }
+.reel-state {
+  position: absolute; left: 50%; top: 50%; z-index: 2; width: 72px; height: 72px; margin: -36px 0 0 -36px;
+  display: grid; place-items: center; border-radius: 50%; pointer-events: none;
+  background: rgb(18 5 8 / .55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  opacity: 0; transform: scale(.85); transition: opacity .25s ease, transform .25s ease;
+}
+.reel-state svg { width: 30px; height: 30px; fill: #fff; }
+.reel-state .i-play { display: none; }
+.reel.is-paused .reel-state { opacity: 1; transform: none; }
+.reel.is-paused .reel-state .i-play { display: block; }
+.reel.is-paused .reel-state .i-pausa { display: none; }
+.reel-progress { position: absolute; left: 14px; right: 14px; top: 12px; z-index: 3; height: 3px; border-radius: 3px; background: rgb(255 255 255 / .3); pointer-events: none; }
+.reel-progress span { display: block; width: 0; height: 100%; border-radius: 3px; background: #fff; }
+.reel-top, .reel-bottom { position: absolute; left: 0; right: 0; z-index: 3; pointer-events: none; }
+.reel-top {
+  top: 0; display: flex; align-items: center; gap: 10px; padding: 24px 14px 36px;
+  background: linear-gradient(to bottom, rgb(18 5 8 / .62), transparent);
+}
+.reel-avatar { flex: none; width: 38px; height: 38px; padding: 2px; border-radius: 50%; object-fit: cover; background: conic-gradient(from 200deg, var(--brand-butter), #fff, var(--gold-mid), var(--brand-butter)); }
+.reel-name { min-width: 0; flex: 1; line-height: 1.25; }
+.reel-name strong { display: block; font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reel-name span { display: block; font-size: 12px; opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reel-follow, .reel-open { pointer-events: auto; }
+.reel-follow {
+  flex: none; padding: 7px 14px; border-radius: 999px;
+  background: var(--brand-butter); color: var(--brand-bordo); font-size: 12px; font-weight: 700;
+}
+.reel-bottom { bottom: 0; padding: 44px 14px 16px; background: linear-gradient(to top, rgb(18 5 8 / .78), transparent); }
+.reel-bottom p { font-size: 15px; font-weight: 600; line-height: 1.3; text-shadow: 0 1px 8px rgb(0 0 0 / .4); }
+.reel-open {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 9px 14px; border-radius: 999px;
+  background: rgb(255 255 255 / .18); border: 1px solid rgb(255 255 255 / .35);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  font-size: 13px; font-weight: 600; color: #fff;
+}
+.reel-open svg { width: 16px; height: 16px; }
+.reels-controls { display: flex; justify-content: center; gap: 8px; margin-top: -44px; position: relative; }
+.reels-controls[hidden] { display: none; }
+.reels-cta { margin-top: 24px; }
+.reels-cta .btn { gap: 10px; }
+.reels-cta .btn svg { width: 18px; height: 18px; }
+@media (min-width: 820px) {
+  .reels-strip { justify-content: center; overflow: visible; gap: 48px; margin: 32px 0 0; padding: 44px 0 56px; }
+  .reels-controls { display: none; }
+  .reel:nth-child(1) .reel-ring { transform: rotate(-3deg) translateY(14px); }
+  .reel:nth-child(2) .reel-ring { transform: rotate(3deg) translateY(-14px); }
+  .reel:hover .reel-ring { transform: none; box-shadow: 0 36px 70px rgb(0 0 0 / .45), 0 0 80px rgb(252 244 140 / .28); }
+}
+
 /* ---------- FAQ ---------- */
 .faq .display-md { text-align: center; margin-bottom: 40px; }
 .faq-list { max-width: 860px; margin: 0 auto; display: grid; gap: 12px; }
@@ -686,6 +773,60 @@ section { padding: var(--section-y) 0; }
     </div>
   </section>
 
+  <!-- Reels de Instagram: videos propios (sin audio) que se reproducen solos al verse en pantalla -->
+  <section class="dark reels" id="reels">
+    <div class="container">
+      <p class="tag reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>En Instagram</p>
+      <h2 class="display-md reveal"><span class="butter">Mirá las copas</span> en acción</h2>
+      <p class="reels-lead reveal">Así se ven y así llegan a manos de quienes las eligen. Los últimos reels de @copasmundiales.</p>
+      <div class="reels-strip reveal" id="strip-reels">
+        <article class="reel">
+          <div class="reel-ring">
+            <div class="reel-phone">
+              <video class="reel-video" muted loop playsinline preload="none" poster="media/reel-copa-real.jpg" data-src="media/reel-copa-real.mp4" aria-label="Reel: la Copa del Mundo tamaño real, en tus manos"></video>
+              <button class="reel-tap" type="button" aria-label="Pausar o reproducir el video"></button>
+              <span class="reel-state" aria-hidden="true"><svg class="i-pausa" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+              <div class="reel-progress" aria-hidden="true"><span></span></div>
+              <div class="reel-top">
+                <img class="reel-avatar" src="favicon.png" alt="" width="38" height="38">
+                <div class="reel-name"><strong>copasmundiales</strong><span>Copas desde 2002</span></div>
+                <a class="reel-follow" href="https://www.instagram.com/copasmundiales/" target="_blank" rel="noopener noreferrer">Seguir</a>
+              </div>
+              <div class="reel-bottom">
+                <p>La Copa del Mundo, tamaño real, en tus manos</p>
+                <a class="reel-open" href="https://www.instagram.com/reel/DecjXJ5Ih3H/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>Ver en Instagram</a>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="reel">
+          <div class="reel-ring">
+            <div class="reel-phone">
+              <video class="reel-video" muted loop playsinline preload="none" poster="media/reel-mini.jpg" data-src="media/reel-mini.mp4" aria-label="Reel: volvieron las Mini copas"></video>
+              <button class="reel-tap" type="button" aria-label="Pausar o reproducir el video"></button>
+              <span class="reel-state" aria-hidden="true"><svg class="i-pausa" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+              <div class="reel-progress" aria-hidden="true"><span></span></div>
+              <div class="reel-top">
+                <img class="reel-avatar" src="favicon.png" alt="" width="38" height="38">
+                <div class="reel-name"><strong>copasmundiales</strong><span>Copas desde 2002</span></div>
+                <a class="reel-follow" href="https://www.instagram.com/copasmundiales/" target="_blank" rel="noopener noreferrer">Seguir</a>
+              </div>
+              <div class="reel-bottom">
+                <p>Volvieron las Mini copas. Ideales para regalar</p>
+                <a class="reel-open" href="https://www.instagram.com/reel/DefCdzKICJ1/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>Ver en Instagram</a>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="reels-controls">
+        <button class="circle-btn" type="button" data-strip="strip-reels" data-dir="-1" aria-label="Reel anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button class="circle-btn" type="button" data-strip="strip-reels" data-dir="1" aria-label="Reel siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+      <p class="reels-cta reveal"><a class="btn btn-butter" href="https://www.instagram.com/copasmundiales/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>Seguinos en Instagram</a></p>
+    </div>
+  </section>
+
   <!-- Clientes -->
   <section class="fog" id="clientes">
     <div class="container">
@@ -882,6 +1023,50 @@ document.addEventListener("click", function (e) {
     nota.hidden = false;
     requestAnimationFrame(function () { requestAnimationFrame(function () { nota.classList.add("on"); }); });
   }, 2500);
+})();
+</script>
+<!-- Reels: se cargan al acercarse a la sección y se reproducen solos (sin sonido, en bucle) mientras se ven;
+     se pausan al salir de pantalla. Con "reducir movimiento" o ahorro de datos no arrancan solos: se tocan. -->
+<script>
+(function () {
+  var tarjetas = document.querySelectorAll(".reel");
+  if (!tarjetas.length || !("IntersectionObserver" in window)) return;
+  var calma = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var ahorro = navigator.connection && navigator.connection.saveData;
+  var solos = !calma && !ahorro;
+  function cargar(v) { if (!v.getAttribute("src")) v.src = v.dataset.src; }
+  function reproducir(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  tarjetas.forEach(function (t) {
+    var v = t.querySelector("video"), barra = t.querySelector(".reel-progress span");
+    t.classList.add("is-paused");
+    v.muted = true;
+    v.addEventListener("play", function () { t.classList.remove("is-paused"); });
+    v.addEventListener("pause", function () { t.classList.add("is-paused"); });
+    v.addEventListener("timeupdate", function () { if (v.duration) barra.style.width = (v.currentTime / v.duration * 100) + "%"; });
+    t.querySelector(".reel-tap").addEventListener("click", function () {
+      cargar(v);
+      if (v.paused) { v.dataset.manual = ""; reproducir(v); } else { v.dataset.manual = "1"; v.pause(); }
+    });
+  });
+  var cerca = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { cargar(e.target.querySelector("video")); cerca.unobserve(e.target); } });
+  }, { rootMargin: "500px 500px" });
+  var visible = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var v = e.target.querySelector("video");
+      if (e.isIntersecting && e.intersectionRatio >= 0.55) { if (solos && v.dataset.manual !== "1") { cargar(v); reproducir(v); } }
+      else if (!v.paused) v.pause();
+    });
+  }, { threshold: [0, 0.55, 1] });
+  tarjetas.forEach(function (t) { cerca.observe(t); visible.observe(t); });
+  // Las flechas solo se muestran si hay algo más para deslizar.
+  var tira = document.getElementById("strip-reels"), flechas = document.querySelector(".reels-controls");
+  function flechasSegunAncho() { if (tira && flechas) flechas.hidden = tira.scrollWidth <= tira.clientWidth + 2; }
+  flechasSegunAncho();
+  window.addEventListener("resize", flechasSegunAncho);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) tarjetas.forEach(function (t) { t.querySelector("video").pause(); });
+  });
 })();
 </script>
 </body>
