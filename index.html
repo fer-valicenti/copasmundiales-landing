@@ -314,6 +314,7 @@ section { padding: var(--section-y) 0; }
   --domo: 92px;
   position: relative; margin-top: 8px; height: calc(var(--alto) + var(--domo) + 64px);
   overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none;
+  isolation: isolate; /* las capas de las copas quedan dentro de la escena: nunca por encima del menú fijo */
   cursor: grab; outline: none;
   background: radial-gradient(60% 55% at 50% 58%, var(--tint) 0%, rgba(252, 246, 218, 0) 70%);
 }
