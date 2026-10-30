@@ -303,17 +303,58 @@ section { padding: var(--section-y) 0; }
 .compare-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 48px; align-items: start; }
 .compare-grid img { width: 100%; border-radius: var(--radius-large); }
 
-/* ---------- Mini copa ---------- */
-.feature {
-  display: grid; grid-template-columns: 1fr; gap: 24px;
-  background: var(--tint);
-  border-radius: var(--radius-large);
-  padding: 16px;
+/* ---------- Productos: rueda que gira al deslizar ---------- */
+/* Las copas (fotos recortadas) se paran sobre el borde de una rueda bordó; al deslizar, la rueda gira,
+   la del centro se agranda y flota, y las de los costados se achican e inclinan. */
+.productos { padding-bottom: calc(var(--section-y) - 8px); }
+.productos .head-center { text-align: center; }
+.productos .head-center .muted { margin-top: 12px; }
+.p3-escena {
+  --alto: clamp(220px, 68vw, 300px);
+  --domo: 92px;
+  position: relative; margin-top: 8px; height: calc(var(--alto) + var(--domo) + 64px);
+  overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none;
+  cursor: grab; outline: none;
+  background: radial-gradient(60% 55% at 50% 58%, var(--tint) 0%, rgba(252, 246, 218, 0) 70%);
 }
-.feature img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 20px; }
-.feature-body { padding: 8px 8px 16px; display: flex; flex-direction: column; justify-content: center; }
-.feature-body .tag { align-self: flex-start; margin-bottom: 20px; }
-.feature-body .muted { margin-top: 12px; }
+.p3-escena.arrastrando { cursor: grabbing; }
+.p3-escena:focus-visible { box-shadow: inset 0 0 0 2px var(--brand-bordo); }
+.p3-rueda { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.p3-rueda text { font: 700 12px/1 var(--font-inter); letter-spacing: .22em; fill: var(--brand-butter); }
+.p3-item { position: absolute; left: 0; top: 0; will-change: transform, opacity; -webkit-tap-highlight-color: transparent; }
+.p3-item img { height: calc(var(--alto) * var(--k, 1)); width: auto; max-width: none; pointer-events: none; -webkit-user-drag: none; }
+.p3-flota { display: block; transform: translateY(calc(var(--lift, 0) * -1px)); }
+.p3-sombra {
+  position: absolute; left: calc(var(--cx) * 100% - 34%); bottom: calc(var(--pie) * 100% - 7px);
+  width: 68%; height: 14px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(40, 6, 16, .45), rgba(40, 6, 16, 0));
+  opacity: calc(1 - var(--lift, 0) / 40); transform: scale(calc(1 - var(--lift, 0) / 60));
+}
+/* Sin JavaScript: las copas en fila, sin efectos */
+html:not(.js) .p3-escena { height: auto; display: flex; justify-content: center; gap: 24px; padding: 24px 0; cursor: auto; }
+html:not(.js) .p3-item { position: static; }
+html:not(.js) .p3-item[aria-hidden="true"], html:not(.js) .p3-rueda { display: none; }
+.p3-controles { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+.p3-puntos { display: flex; gap: 8px; }
+.p3-punto { width: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: var(--hairline); cursor: pointer; transition: background .2s, width .2s; }
+.p3-punto[aria-current="true"] { width: 26px; border-radius: 9999px; background: var(--brand-bordo); }
+.p3-fichas { display: grid; max-width: 560px; margin: 24px auto 0; text-align: center; }
+.js .p3-ficha { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .3s ease, transform .3s ease, visibility 0s .3s; }
+.js .p3-ficha.activa { opacity: 1; visibility: visible; transform: none; transition: opacity .3s ease, transform .3s ease; }
+.p3-ficha .muted { margin-top: 10px; }
+.p3-ficha .mini-prices { justify-content: center; margin: 18px 0 22px; }
+.p3-ficha .actions { display: flex; justify-content: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .p3-item.activo .p3-flota img { animation: p3-flotar 3.4s ease-in-out infinite; }
+  @keyframes p3-flotar { 50% { transform: translateY(-6px); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .p3-ficha, .js .p3-ficha.activa { transition: none; transform: none; }
+}
+@media (min-width: 960px) {
+  .p3-escena { --alto: 380px; --domo: 150px; }
+  .p3-rueda text { font-size: 14px; }
+}
 .mini-prices { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin: 24px 0 28px; }
 .mini-prices .list { font-size: 25px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; }
 .mini-prices .transfer { font-size: 25px; font-weight: 700; color: var(--brand-bordo); letter-spacing: -0.015em; }
@@ -673,8 +714,6 @@ section { padding: var(--section-y) 0; }
   }
   .split { grid-template-columns: 1fr 1fr; gap: 64px; }
   .mosaic { order: 0; }
-  .feature { grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px; }
-  .feature-body { padding: 24px 24px 24px 0; }
   .whatsapp-float { right: 20px; bottom: 20px; width: 68px; height: 68px; }
   .whatsapp-float svg { width: 38px; height: 38px; }
   .intl-note { right: 20px; bottom: 102px; }
@@ -696,7 +735,7 @@ section { padding: var(--section-y) 0; }
         <a href="#vitrina">Vitrina</a>
         <a href="#detalles">Detalles</a>
         <a href="#comparacion">Comparación</a>
-        <a href="#mini">Mini copa</a>
+        <a href="#productos">Productos</a>
         <a href="#clientes">Clientes</a>
         <a href="#faq">Preguntas</a>
       </nav>
@@ -803,14 +842,74 @@ section { padding: var(--section-y) 0; }
     </div>
   </section>
 
-  <!-- Mini copa -->
-  <section id="mini">
+  <!-- Productos: rueda que gira al deslizar (reemplaza a la sección de la mini copa; se deja el ancla #mini) -->
+  <section class="productos" id="productos">
+    <span id="mini" aria-hidden="true"></span>
+    <div class="container head-center">
+      <h2 class="display-md reveal">Nuestros <span class="gold">productos</span></h2>
+      <p class="muted reveal">Deslizá para elegir el tuyo.</p>
+    </div>
+    <div class="p3-escena reveal" id="p3-escena" tabindex="0" role="group" aria-roledescription="carrusel" aria-label="Productos. Usá las flechas para cambiar.">
+      <svg class="p3-rueda" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="p3-degrade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#A8123F"/><stop offset="1" stop-color="#6E0826"/>
+          </linearGradient>
+          <path id="p3-camino" d=""/>
+        </defs>
+        <circle class="p3-disco" cx="0" cy="0" r="0" fill="url(#p3-degrade)"/>
+        <circle class="p3-filo" cx="0" cy="0" r="0" fill="none" stroke="#CFA54C" stroke-opacity=".55" stroke-width="1.5"/>
+        <g class="p3-giro"><text><textPath href="#p3-camino" xlink:href="#p3-camino">COPASMUNDIALES&#160;·&#160;RÉPLICAS DE COLECCIÓN&#160;·&#160;DESLIZÁ PARA ELEGIR&#160;·&#160;</textPath></text></g>
+      </svg>
+      <div class="p3-item" data-slot="0" data-producto="copa" style="--cx:0.51;--pie:0.014;--k:1">
+        <span class="p3-sombra" aria-hidden="true"></span>
+        <span class="p3-flota"><img src="media/producto-copa.webp" alt="Réplica de la Copa del Mundo tamaño real" width="252" height="586" loading="lazy" decoding="async" draggable="false"></span>
+      </div>
+      <div class="p3-item" data-slot="1" data-producto="mini" style="--cx:0.665;--pie:0.053;--k:1.06">
+        <span class="p3-sombra" aria-hidden="true"></span>
+        <span class="p3-flota"><img src="media/producto-mini.webp" alt="Mini Copa del Mundo de 18 cm en la mano" width="347" height="550" loading="lazy" decoding="async" draggable="false"></span>
+      </div>
+      <div class="p3-item" data-slot="2" data-producto="copa" style="--cx:0.51;--pie:0.014;--k:1" aria-hidden="true">
+        <span class="p3-sombra" aria-hidden="true"></span>
+        <span class="p3-flota"><img src="media/producto-copa.webp" alt="" width="252" height="586" loading="lazy" decoding="async" draggable="false"></span>
+      </div>
+      <div class="p3-item" data-slot="3" data-producto="mini" style="--cx:0.665;--pie:0.053;--k:1.06" aria-hidden="true">
+        <span class="p3-sombra" aria-hidden="true"></span>
+        <span class="p3-flota"><img src="media/producto-mini.webp" alt="" width="347" height="550" loading="lazy" decoding="async" draggable="false"></span>
+      </div>
+      <div class="p3-item" data-slot="4" data-producto="copa" style="--cx:0.51;--pie:0.014;--k:1" aria-hidden="true">
+        <span class="p3-sombra" aria-hidden="true"></span>
+        <span class="p3-flota"><img src="media/producto-copa.webp" alt="" width="252" height="586" loading="lazy" decoding="async" draggable="false"></span>
+      </div>
+      <div class="p3-item" data-slot="5" data-producto="mini" style="--cx:0.665;--pie:0.053;--k:1.06" aria-hidden="true">
+        <span class="p3-sombra" aria-hidden="true"></span>
+        <span class="p3-flota"><img src="media/producto-mini.webp" alt="" width="347" height="550" loading="lazy" decoding="async" draggable="false"></span>
+      </div>
+    </div>
     <div class="container">
-      <div class="feature reveal">
-        <img src="https://d22fxaf9t8d39k.cloudfront.net/e02f4f02eeb04225056e1863ace168b6f0f5e34d651f3ba11a710568418487ed442773.jpg" alt="Mini Copa del Mundo de 18 cm" loading="lazy">
-        <div class="feature-body">
-          <p class="tag tag-soft">También disponible</p>
-          <h2 class="heading-sm">Mini Copa del Mundo · 18 cm</h2>
+      <div class="p3-controles">
+        <button class="circle-btn" type="button" data-p3="-1" aria-label="Producto anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div class="p3-puntos">
+          <button class="p3-punto" type="button" data-p3-ir="0" aria-label="Copa del Mundo tamaño real" aria-current="true"></button>
+          <button class="p3-punto" type="button" data-p3-ir="1" aria-label="Mini Copa del Mundo 18 cm"></button>
+        </div>
+        <button class="circle-btn" type="button" data-p3="1" aria-label="Producto siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+      <div class="p3-fichas" aria-live="polite">
+        <div class="p3-ficha activa" data-producto="copa">
+          <h3 class="heading-sm">Copa tamaño real</h3>
+          <p class="muted">Réplica modelo italiano, escala 1:1 (36,8&#160;cm), maciza 3,5&#160;kg, pintada en oro.</p>
+          <div class="mini-prices">
+            <span class="list">$230.000,00</span>
+            <span class="transfer">$207.000,00</span>
+            <span class="caption">con transferencia (10% OFF)<br>o 3 cuotas sin interés de $76.666,67</span>
+          </div>
+          <div class="actions">
+            <a class="btn" href="https://copasmundiales.empretienda.com.ar/general/copa-del-mundo-tamano-real-version-pintada" target="_blank" rel="noopener noreferrer">Comprar</a>
+          </div>
+        </div>
+        <div class="p3-ficha" data-producto="mini">
+          <h3 class="heading-sm">Mini copa · 18 cm</h3>
           <p class="muted">El mismo acabado, en formato escritorio. Ideal para regalar.</p>
           <div class="mini-prices">
             <span class="list">$45.000,00</span>
@@ -818,7 +917,7 @@ section { padding: var(--section-y) 0; }
             <span class="caption">con transferencia (10% OFF)</span>
           </div>
           <div class="actions">
-            <a class="btn" href="https://copasmundiales.empretienda.com.ar/general/mini-copa-del-mundo-18-cm" target="_blank" rel="noopener noreferrer">Ver mini copa</a>
+            <a class="btn" href="https://copasmundiales.empretienda.com.ar/general/mini-copa-del-mundo-18-cm" target="_blank" rel="noopener noreferrer">Comprar</a>
           </div>
         </div>
       </div>
@@ -1051,6 +1150,137 @@ section { padding: var(--section-y) 0; }
     });
   }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
   items.forEach(function (el) { io.observe(el); });
+})();
+</script>
+<!-- Rueda de productos: arrastrar con el dedo o el mouse, flechas, puntos, teclado. La rueda (y su texto) gira junto con las copas. -->
+<script>
+(function () {
+  var escena = document.getElementById("p3-escena");
+  if (!escena) return;
+  var items = [].slice.call(escena.querySelectorAll(".p3-item"));
+  var fichas = [].slice.call(document.querySelectorAll(".p3-ficha"));
+  var puntos = [].slice.call(document.querySelectorAll(".p3-punto"));
+  var svg = escena.querySelector(".p3-rueda"), giro = svg.querySelector(".p3-giro"), camino = svg.querySelector("#p3-camino");
+  var disco = svg.querySelector(".p3-disco"), filo = svg.querySelector(".p3-filo"), degrade = svg.querySelector("#p3-degrade");
+  var texto = svg.querySelector("textPath"), frase = texto.textContent;
+  var N = items.length, P = fichas.length;
+  var calma = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var pos = 0, anim = null, activo = -1, g = {};
+  var mod = function (a, n) { return ((a % n) + n) % n; };
+
+  function medir() {
+    var V = escena.clientWidth, cs = getComputedStyle(escena);
+    var alto = parseFloat(cs.getPropertyValue("--alto")) || 260; // en px (clamp ya resuelto por el navegador si se lee del alto real)
+    var img0 = items[0].querySelector("img"); if (img0.offsetHeight) alto = img0.offsetHeight;
+    var domo = parseFloat(cs.getPropertyValue("--domo")) || 92;
+    var R = Math.min(Math.max(V * 0.62, 230), 560);
+    var abre = Math.min(V * 0.36, 290);
+    g = { V: V, R: R, th: Math.asin(Math.min(0.95, abre / R)), cx: V / 2, cy: escena.clientHeight - domo + R, lift: 16 };
+    items.forEach(function (it) { var im = it.querySelector("img"); it._w = im.offsetWidth; it._h = im.offsetHeight; });
+    svg.setAttribute("width", 2 * R); svg.setAttribute("height", 2 * R);
+    svg.setAttribute("viewBox", (-R) + " " + (-R) + " " + (2 * R) + " " + (2 * R));
+    svg.style.transform = "translate(" + (g.cx - R) + "px," + (g.cy - R) + "px)";
+    disco.setAttribute("r", R); filo.setAttribute("r", R - 7);
+    degrade.setAttribute("y1", -R); degrade.setAttribute("y2", -R + domo * 1.4);
+    var r = R - 24; // el texto corre por dentro del borde, de izquierda a derecha arriba
+    camino.setAttribute("d", "M 0," + (-r) + " A " + r + "," + r + " 0 1,1 0," + r + " A " + r + "," + r + " 0 1,1 0," + (-r));
+    var largo = 2 * Math.PI * r, t = frase; texto.textContent = t;
+    for (var i = 0; i < 40 && texto.getComputedTextLength() < largo - 20; i++) { t += frase; texto.textContent = t; }
+    if (texto.getComputedTextLength() > largo) { t = t.slice(0, -frase.length); texto.textContent = t; }
+    texto.setAttribute("textLength", largo); texto.setAttribute("lengthAdjust", "spacing");
+    pintar();
+  }
+
+  function pintar() {
+    var grados = g.th * 180 / Math.PI;
+    giro.setAttribute("transform", "rotate(" + (-pos * grados) + ")");
+    items.forEach(function (it, i) {
+      var d = mod(i - pos + N / 2, N) - N / 2, ad = Math.abs(d), a = d * g.th;
+      var ax = g.cx + g.R * Math.sin(a), ay = g.cy - g.R * Math.cos(a);
+      var ox = it._w * parseFloat(it.style.getPropertyValue("--cx")), oy = it._h * (1 - parseFloat(it.style.getPropertyValue("--pie")));
+      var esc = 1 - 0.3 * Math.min(ad, 1) - 0.1 * Math.max(0, ad - 1);
+      it.style.transformOrigin = ox + "px " + oy + "px";
+      it.style.transform = "translate(" + (ax - ox) + "px," + (ay - oy) + "px) rotate(" + (a * 180 / Math.PI) + "deg) scale(" + esc + ")";
+      it.style.opacity = ad <= 1 ? 1 : Math.max(0, 1 - (ad - 1) * 0.8);
+      it.style.zIndex = 100 - Math.round(ad * 10);
+      it.style.setProperty("--lift", (g.lift * Math.max(0, 1 - ad)).toFixed(1));
+      it.classList.toggle("activo", ad < 0.02);
+    });
+    var cual = mod(Math.round(pos), N) % P;
+    if (cual !== activo) {
+      activo = cual;
+      fichas.forEach(function (f, i) { f.classList.toggle("activa", i === cual); f.setAttribute("aria-hidden", i === cual ? "false" : "true"); });
+      puntos.forEach(function (b, i) { b.setAttribute("aria-current", i === cual ? "true" : "false"); });
+    }
+  }
+
+  function ir(destino, ms) {
+    if (anim) cancelAnimationFrame(anim.raf);
+    var desde = pos, t0 = performance.now(), dur = calma ? 0 : (ms || 520);
+    anim = { raf: 0 };
+    (function paso(t) {
+      var k = dur ? Math.min(1, (t - t0) / dur) : 1, e = 1 - Math.pow(1 - k, 3);
+      pos = desde + (destino - desde) * e; pintar();
+      if (k < 1) anim.raf = requestAnimationFrame(paso); else { pos = destino; pintar(); anim = null; }
+    })(t0);
+  }
+  function mover(n) { ir(Math.round(pos) + n); }
+  function irProducto(p) { var base = Math.round(pos), actual = mod(base, N) % P, dif = mod(p - actual, P); if (dif > P / 2) dif -= P; ir(base + dif); }
+
+  // Arrastre (dedo o mouse). El scroll vertical de la página sigue funcionando (touch-action: pan-y).
+  var arr = null;
+  escena.addEventListener("pointerdown", function (e) {
+    if (e.button !== 0) return;
+    if (anim) { cancelAnimationFrame(anim.raf); anim = null; }
+    arr = { id: e.pointerId, x0: e.clientX, p0: pos, movio: false, muestras: [[e.clientX, performance.now()]] };
+  });
+  escena.addEventListener("pointermove", function (e) {
+    if (!arr || e.pointerId !== arr.id) return;
+    var dx = e.clientX - arr.x0;
+    if (!arr.movio && Math.abs(dx) > 6) { arr.movio = true; escena.classList.add("arrastrando"); try { escena.setPointerCapture(e.pointerId); } catch (_) {} }
+    if (!arr.movio) return;
+    pos = arr.p0 - dx / (g.R * g.th); pintar();
+    arr.muestras.push([e.clientX, performance.now()]); if (arr.muestras.length > 5) arr.muestras.shift();
+  });
+  function soltar(e, cancelado) {
+    if (!arr || e.pointerId !== arr.id) return;
+    var a = arr; arr = null; escena.classList.remove("arrastrando");
+    if (!a.movio) {
+      if (cancelado) return;
+      var it = e.target.closest && e.target.closest(".p3-item");
+      if (it) { var i = Number(it.dataset.slot), d = mod(i - pos + N / 2, N) - N / 2; if (Math.abs(d) > 0.5) ir(Math.round(pos + d)); }
+      return;
+    }
+    var m = a.muestras, v = 0;
+    if (m.length > 1) { var u = m[m.length - 1], p = m[0], dt = u[1] - p[1]; if (dt > 0) v = (u[0] - p[0]) / dt; } // px por ms
+    var proyectado = pos - (v * 120) / (g.R * g.th);
+    var dest = Math.round(proyectado);
+    if (dest === Math.round(a.p0) && Math.abs(e.clientX - a.x0) > 40) dest = Math.round(a.p0) + (e.clientX < a.x0 ? 1 : -1);
+    dest = Math.max(Math.round(a.p0) - 1, Math.min(Math.round(a.p0) + 1, dest)); // un producto por deslizamiento
+    ir(dest, 600);
+  }
+  escena.addEventListener("pointerup", function (e) { soltar(e, false); });
+  escena.addEventListener("pointercancel", function (e) { soltar(e, true); if (!anim) ir(Math.round(pos)); });
+  escena.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") { e.preventDefault(); mover(-1); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); mover(1); }
+  });
+  document.querySelectorAll("[data-p3]").forEach(function (b) { b.addEventListener("click", function () { mover(Number(b.dataset.p3)); }); });
+  puntos.forEach(function (b) { b.addEventListener("click", function () { irProducto(Number(b.dataset.p3Ir)); }); });
+
+  // Medir cuando cargan las fotos y al cambiar el tamaño de la pantalla
+  items.forEach(function (it) { var im = it.querySelector("img"); if (!im.complete) im.addEventListener("load", medir, { once: true }); });
+  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(medir, 80); });
+  medir();
+
+  // Pista: la primera vez que se ve, la rueda amaga girar para mostrar que se puede deslizar
+  if (!calma && "IntersectionObserver" in window) {
+    var ojo = new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting) return; ojo.disconnect();
+      setTimeout(function () { if (!arr && !anim && Math.round(pos) === 0) { ir(0.22, 450); setTimeout(function () { if (!arr) ir(0, 550); }, 520); } }, 700);
+    }, { threshold: 0.6 });
+    ojo.observe(escena);
+  }
 })();
 </script>
 <!-- Eventos del Meta Pixel: clic en comprar y en WhatsApp -->
