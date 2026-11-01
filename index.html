@@ -325,6 +325,28 @@ section { padding: var(--section-y) 0; }
 .p3-item { position: absolute; left: 0; top: 0; will-change: transform, opacity; -webkit-tap-highlight-color: transparent; }
 .p3-item img { height: calc(var(--alto) * var(--k, 1)); width: auto; max-width: none; pointer-events: none; -webkit-user-drag: none; }
 .p3-flota { display: block; transform: translateY(calc(var(--lift, 0) * -1px)); }
+/* Inclinación con el mouse o el celular (solo la copa del centro; las variables las pone el script en la escena) */
+.p3-mano { display: block; position: relative; transform-origin: 50% 85%; transition: transform .45s ease; }
+.p3-item.activo .p3-mano {
+  transform: perspective(900px) rotateX(calc(var(--rx, 0) * 1deg)) rotateY(calc(var(--ry, 0) * 1deg));
+  transition: transform .12s linear;
+}
+.p3-brillo {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .45s ease;
+  background: radial-gradient(circle at calc(50% + var(--ry, 0) * 2.4%) calc(34% - var(--rx, 0) * 2.6%), rgba(255, 247, 214, .85), rgba(255, 247, 214, 0) 40%);
+  mix-blend-mode: soft-light;
+  -webkit-mask: var(--img) center / 100% 100% no-repeat; mask: var(--img) center / 100% 100% no-repeat;
+}
+.p3-item.activo .p3-brillo { opacity: var(--brillo, 0); transition: opacity .2s linear; }
+.p3-item.activo .p3-sombra { translate: calc(var(--ry, 0) * -0.7px) 0; }
+.p3-mover-fila { display: flex; justify-content: center; margin-top: 14px; }
+.p3-mover {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
+  border: 0; border-radius: var(--radius-pill); background: var(--fog); color: var(--brand-bordo);
+  box-shadow: inset 0 0 0 1px var(--hairline); font: 500 14px/1.3 var(--font-inter); cursor: pointer;
+}
+.p3-mover[hidden] { display: none; }
+.p3-mover svg { width: 18px; height: 18px; }
 .p3-sombra {
   position: absolute; left: calc(var(--cx) * 100% - 34%); bottom: calc(var(--pie) * 100% - 7px);
   width: 68%; height: 14px; border-radius: 50%;
@@ -346,11 +368,12 @@ html:not(.js) .p3-item[aria-hidden="true"], html:not(.js) .p3-rueda { display: n
 .p3-ficha .mini-prices { justify-content: center; margin: 18px 0 22px; }
 .p3-ficha .actions { display: flex; justify-content: center; }
 @media (prefers-reduced-motion: no-preference) {
-  .p3-item.activo .p3-flota img { animation: p3-flotar 3.4s ease-in-out infinite; }
+  .p3-item.activo .p3-flota img, .p3-item.activo .p3-brillo { animation: p3-flotar 3.4s ease-in-out infinite; } /* el brillo flota junto con la foto */
   @keyframes p3-flotar { 50% { transform: translateY(-6px); } }
 }
 @media (prefers-reduced-motion: reduce) {
   .js .p3-ficha, .js .p3-ficha.activa { transition: none; transform: none; }
+  .p3-item.activo .p3-mano { transform: none; }
 }
 @media (min-width: 960px) {
   .p3-escena { --alto: 380px; --domo: 150px; }
@@ -864,27 +887,27 @@ html:not(.js) .p3-item[aria-hidden="true"], html:not(.js) .p3-rueda { display: n
       </svg>
       <div class="p3-item" data-slot="0" data-producto="copa" style="--cx:0.49;--pie:0.005;--k:1">
         <span class="p3-sombra" aria-hidden="true"></span>
-        <span class="p3-flota"><img src="media/producto-copa.webp" alt="Réplica de la Copa del Mundo tamaño real" width="454" height="1100" loading="lazy" decoding="async" draggable="false"></span>
+        <span class="p3-flota"><span class="p3-mano" style="--img:url(media/producto-copa.webp)"><img src="media/producto-copa.webp" alt="Réplica de la Copa del Mundo tamaño real" width="454" height="1100" loading="lazy" decoding="async" draggable="false"><span class="p3-brillo" aria-hidden="true"></span></span></span>
       </div>
       <div class="p3-item" data-slot="1" data-producto="mini" style="--cx:0.665;--pie:0.053;--k:1.06">
         <span class="p3-sombra" aria-hidden="true"></span>
-        <span class="p3-flota"><img src="media/producto-mini.webp" alt="Mini Copa del Mundo de 18 cm en la mano" width="347" height="550" loading="lazy" decoding="async" draggable="false"></span>
+        <span class="p3-flota"><span class="p3-mano" style="--img:url(media/producto-mini.webp)"><img src="media/producto-mini.webp" alt="Mini Copa del Mundo de 18 cm en la mano" width="347" height="550" loading="lazy" decoding="async" draggable="false"><span class="p3-brillo" aria-hidden="true"></span></span></span>
       </div>
       <div class="p3-item" data-slot="2" data-producto="copa" style="--cx:0.49;--pie:0.005;--k:1" aria-hidden="true">
         <span class="p3-sombra" aria-hidden="true"></span>
-        <span class="p3-flota"><img src="media/producto-copa.webp" alt="" width="454" height="1100" loading="lazy" decoding="async" draggable="false"></span>
+        <span class="p3-flota"><span class="p3-mano" style="--img:url(media/producto-copa.webp)"><img src="media/producto-copa.webp" alt="" width="454" height="1100" loading="lazy" decoding="async" draggable="false"><span class="p3-brillo" aria-hidden="true"></span></span></span>
       </div>
       <div class="p3-item" data-slot="3" data-producto="mini" style="--cx:0.665;--pie:0.053;--k:1.06" aria-hidden="true">
         <span class="p3-sombra" aria-hidden="true"></span>
-        <span class="p3-flota"><img src="media/producto-mini.webp" alt="" width="347" height="550" loading="lazy" decoding="async" draggable="false"></span>
+        <span class="p3-flota"><span class="p3-mano" style="--img:url(media/producto-mini.webp)"><img src="media/producto-mini.webp" alt="" width="347" height="550" loading="lazy" decoding="async" draggable="false"><span class="p3-brillo" aria-hidden="true"></span></span></span>
       </div>
       <div class="p3-item" data-slot="4" data-producto="copa" style="--cx:0.49;--pie:0.005;--k:1" aria-hidden="true">
         <span class="p3-sombra" aria-hidden="true"></span>
-        <span class="p3-flota"><img src="media/producto-copa.webp" alt="" width="454" height="1100" loading="lazy" decoding="async" draggable="false"></span>
+        <span class="p3-flota"><span class="p3-mano" style="--img:url(media/producto-copa.webp)"><img src="media/producto-copa.webp" alt="" width="454" height="1100" loading="lazy" decoding="async" draggable="false"><span class="p3-brillo" aria-hidden="true"></span></span></span>
       </div>
       <div class="p3-item" data-slot="5" data-producto="mini" style="--cx:0.665;--pie:0.053;--k:1.06" aria-hidden="true">
         <span class="p3-sombra" aria-hidden="true"></span>
-        <span class="p3-flota"><img src="media/producto-mini.webp" alt="" width="347" height="550" loading="lazy" decoding="async" draggable="false"></span>
+        <span class="p3-flota"><span class="p3-mano" style="--img:url(media/producto-mini.webp)"><img src="media/producto-mini.webp" alt="" width="347" height="550" loading="lazy" decoding="async" draggable="false"><span class="p3-brillo" aria-hidden="true"></span></span></span>
       </div>
     </div>
     <div class="container">
@@ -896,6 +919,7 @@ html:not(.js) .p3-item[aria-hidden="true"], html:not(.js) .p3-rueda { display: n
         </div>
         <button class="circle-btn" type="button" data-p3="1" aria-label="Producto siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
       </div>
+      <p class="p3-mover-fila"><button class="p3-mover" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/><path d="M3.5 9.5c-.7 1.6-.7 3.4 0 5"/><path d="M20.5 9.5c.7 1.6.7 3.4 0 5"/></svg>Mover la copa con el celular</button></p>
       <div class="p3-fichas" aria-live="polite">
         <div class="p3-ficha activa" data-producto="copa">
           <h3 class="heading-sm">Copa tamaño real</h3>
@@ -1273,6 +1297,59 @@ html:not(.js) .p3-item[aria-hidden="true"], html:not(.js) .p3-rueda { display: n
   items.forEach(function (it) { var im = it.querySelector("img"); if (!im.complete) im.addEventListener("load", medir, { once: true }); });
   var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(medir, 80); });
   medir();
+
+  // Se mueve con tu mano: la copa del centro se inclina siguiendo el mouse (PC) o el movimiento del celular.
+  // Con "reducir movimiento" no se activa. En iPhone hace falta tocar un botón para dar el permiso de movimiento.
+  if (!calma) (function () {
+    var obj = { x: 0, y: 0 }, act = { x: 0, y: 0 }, raf = 0, sensor = false, base = null;
+    var lim = function (v) { return Math.max(-1, Math.min(1, v)); };
+    function aplicar() {
+      act.x += (obj.x - act.x) * 0.14; act.y += (obj.y - act.y) * 0.14;
+      var mag = Math.min(1, Math.sqrt(act.x * act.x + act.y * act.y));
+      escena.style.setProperty("--ry", (act.x * 16).toFixed(2));
+      escena.style.setProperty("--rx", (-act.y * 11).toFixed(2));
+      escena.style.setProperty("--brillo", (0.25 + 0.75 * mag).toFixed(3));
+      if (Math.abs(obj.x - act.x) > 0.002 || Math.abs(obj.y - act.y) > 0.002) raf = requestAnimationFrame(aplicar); else raf = 0;
+    }
+    function apuntar(x, y) { obj.x = lim(x); obj.y = lim(y); if (!raf) raf = requestAnimationFrame(aplicar); }
+    // Mouse: la copa mira hacia el cursor mientras está sobre la escena
+    escena.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse" || arr) return;
+      var it = escena.querySelector(".p3-item.activo img"); if (!it) return;
+      var r = it.getBoundingClientRect();
+      apuntar((e.clientX - (r.left + r.width / 2)) / (r.width * 1.4), (e.clientY - (r.top + r.height / 2)) / (r.height * 0.8));
+    });
+    escena.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") apuntar(0, 0); });
+    escena.addEventListener("pointerdown", function () { if (!sensor) apuntar(0, 0); });
+    // Celular: inclinación del teléfono respecto de cómo lo venía sosteniendo (la referencia se reacomoda despacio)
+    function girar(e) {
+      if (e.beta == null || e.gamma == null) return;
+      var ang = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+      var lado = e.gamma, frente = e.beta;
+      if (ang === 90) { lado = e.beta; frente = -e.gamma; } else if (ang === -90 || ang === 270) { lado = -e.beta; frente = e.gamma; }
+      if (!base) base = { l: lado, f: frente };
+      base.l += (lado - base.l) * 0.01; base.f += (frente - base.f) * 0.01;
+      if (arr) return;
+      apuntar((lado - base.l) / 22, (frente - base.f) / 18);
+    }
+    function activarSensor() { if (sensor) return; sensor = true; window.addEventListener("deviceorientation", girar); }
+    var tactil = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    if (tactil && "DeviceOrientationEvent" in window) {
+      var boton = document.querySelector(".p3-mover");
+      if (typeof DeviceOrientationEvent.requestPermission === "function") {
+        if (boton) {
+          boton.hidden = false;
+          boton.addEventListener("click", function () {
+            DeviceOrientationEvent.requestPermission().then(function (estado) {
+              if (estado === "granted") { activarSensor(); boton.hidden = true; }
+              else { boton.textContent = "Sin permiso de movimiento"; boton.disabled = true; }
+            }).catch(function () { boton.hidden = true; });
+          });
+        }
+      } else activarSensor();
+    }
+    apuntar(0, 0);
+  })();
 
   // Pista: la primera vez que se ve, la rueda amaga girar para mostrar que se puede deslizar
   if (!calma && "IntersectionObserver" in window) {
