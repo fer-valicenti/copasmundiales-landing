@@ -303,21 +303,42 @@ section { padding: var(--section-y) 0; }
 .compare-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 48px; align-items: start; }
 .compare-grid img { width: 100%; border-radius: var(--radius-large); }
 
-/* ---------- Mini copa ---------- */
-.feature {
-  display: grid; grid-template-columns: 1fr; gap: 24px;
-  background: var(--tint);
-  border-radius: var(--radius-large);
-  padding: 16px;
+/* ---------- Productos: copa grande y mini copa ---------- */
+.productos-head { text-align: center; margin-bottom: 40px; }
+.productos-head .tag { margin-bottom: 20px; }
+.productos-head .muted { max-width: 560px; margin: 16px auto 0; text-wrap: balance; }
+.productos-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+/* Puntos del deslizable (solo en celular) */
+.productos-puntos { display: none; justify-content: center; gap: 2px; margin-top: 14px; }
+.productos-puntos button { width: 32px; height: 28px; border: 0; padding: 0; background: none; display: grid; place-items: center; cursor: pointer; }
+.productos-puntos button::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: rgba(148, 12, 52, .22); transition: width .2s, background .2s; }
+.productos-puntos button[aria-current="true"]::before { width: 24px; background: var(--brand-bordo); }
+@media (max-width: 719px) {
+  /* En celular: tarjetas una al lado de la otra que se deslizan de costado; se asoma la siguiente */
+  .productos-grid {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(84%, 340px); gap: 12px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
+    margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter); scroll-padding: 0 var(--gutter);
+  }
+  .productos-grid::-webkit-scrollbar { display: none; }
+  .productos-grid .producto { scroll-snap-align: start; }
+  .productos-puntos { display: flex; }
 }
-.feature img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 20px; }
-.feature-body { padding: 8px 8px 16px; display: flex; flex-direction: column; justify-content: center; }
-.feature-body .tag { align-self: flex-start; margin-bottom: 20px; }
-.feature-body .muted { margin-top: 12px; }
-.mini-prices { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin: 24px 0 28px; }
+.producto { display: flex; flex-direction: column; background: var(--tint); border-radius: var(--radius-large); padding: 16px; }
+.producto img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 20px; background: var(--paper); }
+.producto-body { flex: 1; display: flex; flex-direction: column; padding: 20px 8px 8px; }
+.producto-body .tag { align-self: flex-start; margin-bottom: 16px; }
+.producto-body .muted { margin-top: 10px; }
+.producto-body .actions { margin-top: auto; }
+.mini-prices { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin: 20px 0 24px; }
 .mini-prices .list { font-size: 25px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; }
 .mini-prices .transfer { font-size: 25px; font-weight: 700; color: var(--brand-bordo); letter-spacing: -0.015em; }
 .mini-prices .caption { flex-basis: 100%; color: var(--muted); }
+@media (min-width: 720px) {
+  .productos-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .producto { padding: 20px; }
+  .producto-body { padding: 24px 8px 8px; }
+}
 
 /* ---------- Clientes ---------- */
 .head-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px; margin-bottom: 40px; }
@@ -756,8 +777,6 @@ section { padding: var(--section-y) 0; }
   }
   .split { grid-template-columns: 1fr 1fr; gap: 64px; }
   .mosaic { order: 0; }
-  .feature { grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px; }
-  .feature-body { padding: 24px 24px 24px 0; }
   .whatsapp-float { right: 20px; bottom: 20px; width: 68px; height: 68px; }
   .whatsapp-float svg { width: 38px; height: 38px; }
   .intl-note { right: 20px; bottom: 102px; }
@@ -779,7 +798,7 @@ section { padding: var(--section-y) 0; }
         <a href="#vitrina">Vitrina</a>
         <a href="#detalles">Detalles</a>
         <a href="#comparacion">Comparación</a>
-        <a href="#mini">Mini copa</a>
+        <a href="#productos">Productos</a>
         <a href="#clientes">Clientes</a>
         <a href="#faq">Preguntas</a>
       </nav>
@@ -886,24 +905,51 @@ section { padding: var(--section-y) 0; }
     </div>
   </section>
 
-  <!-- Mini copa -->
-  <section id="mini">
+  <!-- Productos: copa grande (tamaño real) y mini copa -->
+  <section id="productos">
     <div class="container">
-      <div class="feature reveal">
-        <img src="https://d22fxaf9t8d39k.cloudfront.net/e02f4f02eeb04225056e1863ace168b6f0f5e34d651f3ba11a710568418487ed442773.jpg" alt="Mini Copa del Mundo de 18 cm" loading="lazy">
-        <div class="feature-body">
-          <p class="tag tag-soft">También disponible</p>
-          <h2 class="heading-sm">Mini Copa del Mundo · 18 cm</h2>
-          <p class="muted">El mismo acabado, en formato escritorio. Ideal para regalar.</p>
-          <div class="mini-prices">
-            <span class="list">$45.000,00</span>
-            <span class="transfer">$40.500,00</span>
-            <span class="caption">con transferencia (10% OFF)</span>
+      <div class="productos-head reveal">
+        <p class="tag">Productos</p>
+        <h2 class="display-md">Elegí <span class="gold">tu copa</span></h2>
+        <p class="muted">La réplica tamaño real o la mini para el escritorio. Las dos pintadas a mano en oro.</p>
+      </div>
+      <div class="productos-grid reveal">
+        <article class="producto">
+          <img src="https://d22fxaf9t8d39k.cloudfront.net/02091cf47af178b5bb2196b27e2b4fd87d234a4adaa4872db71fe7e5378a87b9442773.jpg" alt="Copa del Mundo tamaño real de 36,8 cm" loading="lazy">
+          <div class="producto-body">
+            <p class="tag tag-soft">Tamaño real · 36,8 cm</p>
+            <h3 class="subheading">Copa del Mundo</h3>
+            <p class="muted">Escala 1:1, maciza de 3,5 kg, con la base grabada con todos los campeones.</p>
+            <div class="mini-prices">
+              <span class="list">$230.000,00</span>
+              <span class="transfer">$207.000,00</span>
+              <span class="caption">con transferencia (10% OFF)</span>
+            </div>
+            <div class="actions">
+              <a class="btn" href="https://copasmundiales.empretienda.com.ar/general/copa-del-mundo-tamano-real-version-pintada" target="_blank" rel="noopener noreferrer">Ver copa grande</a>
+            </div>
           </div>
-          <div class="actions">
-            <a class="btn" href="https://copasmundiales.empretienda.com.ar/general/mini-copa-del-mundo-18-cm" target="_blank" rel="noopener noreferrer">Ver mini copa</a>
+        </article>
+        <article class="producto">
+          <img src="https://d22fxaf9t8d39k.cloudfront.net/e02f4f02eeb04225056e1863ace168b6f0f5e34d651f3ba11a710568418487ed442773.jpg" alt="Mini Copa del Mundo de 18 cm" loading="lazy">
+          <div class="producto-body">
+            <p class="tag tag-soft">Mini · 18 cm</p>
+            <h3 class="subheading">Mini Copa del Mundo</h3>
+            <p class="muted">El mismo acabado, en formato escritorio. Ideal para regalar.</p>
+            <div class="mini-prices">
+              <span class="list">$45.000,00</span>
+              <span class="transfer">$40.500,00</span>
+              <span class="caption">con transferencia (10% OFF)</span>
+            </div>
+            <div class="actions">
+              <a class="btn" href="https://copasmundiales.empretienda.com.ar/general/mini-copa-del-mundo-18-cm" target="_blank" rel="noopener noreferrer">Ver mini copa</a>
+            </div>
           </div>
-        </div>
+        </article>
+      </div>
+      <div class="productos-puntos" id="productos-puntos">
+        <button type="button" aria-label="Ver la copa grande" aria-current="true"></button>
+        <button type="button" aria-label="Ver la mini copa" aria-current="false"></button>
       </div>
     </div>
   </section>
@@ -1347,6 +1393,24 @@ section { padding: var(--section-y) 0; }
     var alBajar = function () { if (window.scrollY > (document.documentElement.scrollHeight - innerHeight) * 0.3) auto(); };
     window.addEventListener("scroll", alBajar, { passive: true }); setTimeout(auto, 15000);
   }
+})();
+</script>
+<!-- Productos: puntos del deslizable en celular -->
+<script>
+(function () {
+  var fila = document.querySelector("#productos .productos-grid"), puntos = document.querySelectorAll("#productos-puntos button");
+  if (!fila || !puntos.length) return;
+  var suave = !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  function maximo() { return Math.max(0, fila.scrollWidth - fila.clientWidth); }
+  function marcar() {
+    var m = maximo(), i = m ? Math.round(fila.scrollLeft / m * (puntos.length - 1)) : 0;
+    puntos.forEach(function (b, j) { b.setAttribute("aria-current", j === i ? "true" : "false"); });
+  }
+  puntos.forEach(function (b, j) {
+    b.addEventListener("click", function () { fila.scrollTo({ left: maximo() * j / (puntos.length - 1), behavior: suave ? "smooth" : "auto" }); });
+  });
+  fila.addEventListener("scroll", marcar, { passive: true });
+  window.addEventListener("resize", marcar);
 })();
 </script>
 <!-- Eventos del Meta Pixel: clic en comprar y en WhatsApp -->
