@@ -1105,7 +1105,7 @@ section { padding: var(--section-y) 0; }
           <p class="bf-codigo" data-bf="codigo">COPAS15</p>
           <canvas class="bf-lienzo" aria-hidden="true"></canvas>
         </div>
-        <p class="bf-ticket-pie" data-bf="vence">Válido hasta el lunes 30/11 a las 23:59</p>
+        <p class="bf-ticket-pie" data-bf="vence">Válido hasta el domingo 29/11 a las 23:59</p>
       </div>
       <div class="bf-ticket-talon" aria-hidden="true"><span>Platea VIP</span><span class="bf-barras"></span><span>Fila 1 · Asiento 10</span></div>
     </div>
@@ -1175,7 +1175,7 @@ section { padding: var(--section-y) 0; }
   var BF = {
     adelantoDesde: "2026-11-24T00:00:00-03:00", // desde acá se ve el adelanto ("se abre el viernes")
     desde: "2026-11-27T00:00:00-03:00",         // se puede raspar el cupón
-    hasta: "2026-11-30T23:59:59-03:00",         // después de esto desaparece todo
+    hasta: "2026-11-29T23:59:59-03:00",         // después de esto desaparece todo
     descuento: 15,                               // % del cupón (confirmado por Fernando: código COPAS15)
     codigos: { web: "COPAS15", anuncios: "COPAS15" } // un código por canal para medir en Empretienda (pueden ser iguales)
   };
@@ -1273,9 +1273,9 @@ section { padding: var(--section-y) 0; }
   });
 
   // ---- Abrir y cerrar el panel
-  var ultimoFoco = null;
+  var ultimoFoco = null, autoCancelado = false; // si el panel ya se abrió (a mano o solo), no se vuelve a abrir solo
   function abrir() {
-    ultimoFoco = document.activeElement; fondo.hidden = false; hoja.hidden = false; document.documentElement.classList.add("bf-abierto");
+    autoCancelado = true; ultimoFoco = document.activeElement; fondo.hidden = false; hoja.hidden = false; document.documentElement.classList.add("bf-abierto");
     requestAnimationFrame(function () { fondo.classList.add("on"); hoja.classList.add("on"); if (!revelado) pintarCapa(); });
     $(".bf-cerrar").focus({ preventScroll: true });
   }
@@ -1343,7 +1343,7 @@ section { padding: var(--section-y) 0; }
   // ---- Se abre solo una vez: al bajar un tercio de la página o a los 15 s (si no lo cerró en las últimas 24 h)
   var cerrado = Number(leer("bf-cerrado") || 0);
   if (modo === "vivo" && !revelado && Date.now() - cerrado > 864e5) {
-    var hecho = false, auto = function () { if (hecho || !hoja.hidden) return; hecho = true; window.removeEventListener("scroll", alBajar); abrir(); };
+    var hecho = false, auto = function () { if (hecho || autoCancelado || revelado || !hoja.hidden) return; hecho = true; window.removeEventListener("scroll", alBajar); abrir(); };
     var alBajar = function () { if (window.scrollY > (document.documentElement.scrollHeight - innerHeight) * 0.3) auto(); };
     window.addEventListener("scroll", alBajar, { passive: true }); setTimeout(auto, 15000);
   }
