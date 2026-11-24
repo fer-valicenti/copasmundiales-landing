@@ -1102,7 +1102,7 @@ section { padding: var(--section-y) 0; }
         <p class="bf-ticket-top">Copa del Mundo · Black Friday</p>
         <p class="bf-ticket-off"><span data-bf="pct">15</span>%<small> OFF</small></p>
         <div class="bf-raspar">
-          <p class="bf-codigo" data-bf="codigo">BLACKCOPA</p>
+          <p class="bf-codigo" data-bf="codigo">COPAS15</p>
           <canvas class="bf-lienzo" aria-hidden="true"></canvas>
         </div>
         <p class="bf-ticket-pie" data-bf="vence">Válido hasta el lunes 30/11 a las 23:59</p>
@@ -1176,8 +1176,8 @@ section { padding: var(--section-y) 0; }
     adelantoDesde: "2026-11-24T00:00:00-03:00", // desde acá se ve el adelanto ("se abre el viernes")
     desde: "2026-11-27T00:00:00-03:00",         // se puede raspar el cupón
     hasta: "2026-11-30T23:59:59-03:00",         // después de esto desaparece todo
-    descuento: 15,                               // % del cupón (PROVISORIO: lo define Fernando)
-    codigos: { web: "BLACKCOPA", anuncios: "BLACKCOPA" } // un código por canal para medir en Empretienda (pueden ser iguales)
+    descuento: 15,                               // % del cupón (confirmado por Fernando: código COPAS15)
+    codigos: { web: "COPAS15", anuncios: "COPAS15" } // un código por canal para medir en Empretienda (pueden ser iguales)
   };
   var pildora = document.querySelector(".bf-pildora"), hoja = document.getElementById("bf-hoja"), fondo = document.querySelector(".bf-fondo");
   if (!pildora || !hoja || !fondo) return;
